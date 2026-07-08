@@ -266,18 +266,22 @@
   /* food list — rows instead of flat bullets, dish name picked out */
   .tp-food-item{padding:11px 0; border-bottom:1px dotted var(--line); font-size:12.5px; line-height:1.6;}
   .tp-food-item:last-child{border-bottom:none;}
-  .tp-food-item .dish{color:var(--porcelain); font-weight:600;}
+  .tp-food-item .dish{color:var(--jade); font-weight:600; text-shadow:0 0 6px rgba(46,196,201,.3);}
   .tp-food-item .note{color:var(--porcelain-dim);}
 
   .tp-content ul{margin:0; padding-left:18px; font-size:12px; color:var(--porcelain-dim); line-height:1.6;}
   .tp-content ul li{margin-bottom:8px;}
   .tp-content ul li:last-child{margin-bottom:0;}
 
-  /* budget list — category icon picked out from the label */
+  /* budget list — category tag (Chinese, teal) picked out from the label */
   .tp-budget-item{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:10px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
   .tp-budget-item:last-of-type{border-bottom:none;}
-  .tp-budget-item .label{color:var(--porcelain-dim); display:inline-flex; align-items:baseline; gap:9px;}
-  .tp-budget-item .label .ico{color:var(--jade); font-size:11px; opacity:.9; flex-shrink:0;}
+  .tp-budget-item .label{color:var(--porcelain-dim); display:inline-flex; align-items:baseline; gap:2px;}
+  .tp-budget-item .label .ico{
+    color:var(--jade); font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.02em;
+    opacity:.85; flex-shrink:0;
+  }
+  .tp-budget-item .label .ico::before{content:'// '; opacity:.7;}
   .tp-budget-item .amount{color:var(--gold); font-family:'Oswald', sans-serif; white-space:nowrap; text-shadow:0 0 8px rgba(225,58,46,.4);}
   .tp-budget-note{font-size:11px; color:var(--porcelain-dim); margin-top:12px; opacity:.75; line-height:1.5;}
 
@@ -475,9 +479,9 @@
         <div class="tp-food-item"><span class="dish">Танхулу</span> <span class="note">— засахаренные ягоды боярышника на палочке</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label"><span class="ico">✈</span>Перелёт Москва → Пекин</span><span class="amount">зависит от дат</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Билеты: Запретный город + Стена + Universal + Храм Неба</span><span class="amount">≈¥950—1100 ($130—155)</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Еда, в день на человека</span><span class="amount">≈¥150—350</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">交通</span>Перелёт Москва → Пекин</span><span class="amount">зависит от дат</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">门票</span>Билеты: Запретный город + Стена + Universal + Храм Неба</span><span class="amount">≈¥950—1100 ($130—155)</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">美食</span>Еда, в день на человека</span><span class="amount">≈¥150—350</span></div>
         <div class="tp-budget-note">Ориентировочно: входные цены не проверялись под конкретные даты — свериться перед поездкой.</div>
       </div>
     </div>
@@ -530,10 +534,10 @@
         <div class="tp-food-item"><span class="dish">Лапша с луковым маслом</span> <span class="note">(cong you ban mian)</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🚄</span>Поезд Пекин → Шанхай</span><span class="amount">¥300—650 ($40—90)</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Shanghai Tower, смотровая (по желанию)</span><span class="amount">≈¥180—220</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Юйюань + паром</span><span class="amount">≈¥42</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Еда, в день на человека</span><span class="amount">≈¥150—400</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">交通</span>Поезд Пекин → Шанхай</span><span class="amount">¥300—650 ($40—90)</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">门票</span>Shanghai Tower, смотровая (по желанию)</span><span class="amount">≈¥180—220</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">门票</span>Юйюань + паром</span><span class="amount">≈¥42</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">美食</span>Еда, в день на человека</span><span class="amount">≈¥150—400</span></div>
         <div class="tp-budget-note">Волосатый краб — разовый splurge ≈¥100—300 за штуку в зависимости от размера. Ориентировочно.</div>
       </div>
     </div>
@@ -586,10 +590,10 @@
         <div class="tp-food-item"><span class="dish">Чуань-чуань</span> <span class="note">— уличная вариация хого на шпажках</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label"><span class="ico">✈</span>Перелёт Шанхай → Чунцин</span><span class="amount">$100—200</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Входные билеты</span><span class="amount">почти всё бесплатно</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Хого на двоих</span><span class="amount">≈¥150—300</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Сяомянь / чуань-чуань, разовый приём</span><span class="amount">≈¥20—50</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">交通</span>Перелёт Шанхай → Чунцин</span><span class="amount">$100—200</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">门票</span>Входные билеты</span><span class="amount">почти всё бесплатно</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">美食</span>Хого на двоих</span><span class="amount">≈¥150—300</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">美食</span>Сяомянь / чуань-чуань, разовый приём</span><span class="amount">≈¥20—50</span></div>
         <div class="tp-budget-note">Самый бюджетный город маршрута — большинство точек без входного билета.</div>
       </div>
     </div>
@@ -642,11 +646,11 @@
         <div class="tp-food-item"><span class="dish">Юаньян</span> <span class="note">(yuenyeung) — смесь чая с кофе, местный напиток</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label"><span class="ico">✈</span>Перелёт Чунцин → Гонконг</span><span class="amount">$80—250</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🏨</span>Жильё 22—25 окт</span><span class="amount">уже оплачено</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🎵</span>Билет The Weeknd</span><span class="amount">уже куплен</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Peak Tram, туда-обратно</span><span class="amount">≈HK$88—135</span></div>
-        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Еда, приём пищи</span><span class="amount">≈HK$150—300</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">交通</span>Перелёт Чунцин → Гонконг</span><span class="amount">$80—250</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">住宿</span>Жильё 22—25 окт</span><span class="amount">уже оплачено</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">演出</span>Билет The Weeknd</span><span class="amount">уже куплен</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">门票</span>Peak Tram, туда-обратно</span><span class="amount">≈HK$88—135</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">美食</span>Еда, приём пищи</span><span class="amount">≈HK$150—300</span></div>
         <div class="tp-budget-note">Самый дорогой город маршрута из четырёх — закладывай отдельно на последние дни.</div>
       </div>
     </div>
