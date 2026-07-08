@@ -236,6 +236,13 @@
     padding:20px 22px 26px; margin:-4px 0 22px; animation:panelIn .18s ease;
   }
   @keyframes panelIn{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+  .tp-poster{margin:-4px 0 20px; border:1px solid var(--line);}
+  .tp-poster img{display:block; width:100%; height:auto; max-height:420px; object-fit:cover; object-position:center 20%;}
+  .tp-poster-cap{
+    display:flex; align-items:center; justify-content:space-between; gap:10px 16px; flex-wrap:wrap;
+    padding:10px 14px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--porcelain-dim); border-top:1px solid var(--line);
+  }
   .tp-tabs{display:flex; gap:4px 18px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:18px;}
   .tp-tab{
     font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.07em; text-transform:uppercase;
@@ -593,6 +600,10 @@
       </div>
     </div>
     <div class="ticket-panel" id="panel-hongkong" hidden>
+      <div class="tp-poster">
+        <img src="weeknd-poster.jpg" alt="The Weeknd — After Hours Till Dawn, Hong Kong, Kai Tak Stadium">
+        <div class="tp-poster-cap">THE WEEKND · KAI TAK STADIUM · 24 ОКТ <span class="term-tag" style="display:inline;">CONFIRMED · 已确认</span></div>
+      </div>
       <div class="tp-tabs">
         <button class="tp-tab active" type="button" data-tab="days">День за днём</button>
         <button class="tp-tab" type="button" data-tab="poi">Брони</button>
