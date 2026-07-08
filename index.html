@@ -297,17 +297,24 @@
   .tp-poster-img{position:relative; overflow:hidden;}
   .tp-poster-img img{
     display:block; width:100%; height:auto; max-height:420px; object-fit:cover; object-position:center 20%;
-    filter:grayscale(1) contrast(1.15) brightness(.8);
+    filter:grayscale(1) contrast(1.15) brightness(.85);
+    position:relative;
   }
-  /* flat palette tint + halftone dots — plain alpha only, no blend-mode/SVG filter
-     (those don't render reliably inside the Telegram in-app WebView) */
-  .tp-poster-img::before{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:rgba(225,58,46,.4);
+  /* two colour-tinted, offset copies of the same photo = chromatic-aberration glitch
+     ghost, matching the h1 title treatment. Plain filter + opacity only — no
+     mix-blend-mode/SVG filter, since those don't render reliably inside the
+     Telegram in-app WebView. */
+  .tp-poster-ghost{
+    position:absolute; inset:0; pointer-events:none;
+    background-image:url('weeknd-poster.jpg');
+    background-size:cover; background-position:center 20%;
+    opacity:.5;
   }
+  .tp-poster-ghost.red{filter:grayscale(1) sepia(1) saturate(7) hue-rotate(-28deg) brightness(.95); transform:translateX(-4px);}
+  .tp-poster-ghost.teal{filter:grayscale(1) sepia(1) saturate(7) hue-rotate(140deg) brightness(1.05); transform:translateX(4px);}
   .tp-poster-img::after{
     content:''; position:absolute; inset:0; pointer-events:none;
-    background-image:radial-gradient(circle, rgba(18,63,66,.7) 1px, transparent 1.3px);
+    background-image:radial-gradient(circle, rgba(10,10,10,.5) 1px, transparent 1.3px);
     background-size:4px 4px;
   }
   .tp-poster-cap{
@@ -702,6 +709,8 @@
         <span class="xmark tl red"></span>
         <div class="tp-poster-img">
           <img src="weeknd-poster.jpg" alt="The Weeknd — After Hours Till Dawn, Hong Kong, Kai Tak Stadium">
+          <div class="tp-poster-ghost red"></div>
+          <div class="tp-poster-ghost teal"></div>
         </div>
         <div class="tp-poster-cap">THE WEEKND · KAI TAK STADIUM · 24 ОКТ <span class="term-tag" style="display:inline;">CONFIRMED · 已确认</span></div>
       </div>
