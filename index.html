@@ -251,18 +251,33 @@
   }
   .tp-tab:hover{color:var(--porcelain);}
   .tp-tab.active{color:var(--gold); border-bottom-color:var(--gold);}
+  .tp-tab:focus{outline:none;}
+  .tp-tab:focus-visible{outline:1px solid var(--jade); outline-offset:3px;}
+  .ticket:focus{outline:none;}
+  .ticket:focus-visible{outline:1px solid var(--jade); outline-offset:-1px;}
+
   .dp-day{display:grid; grid-template-columns:60px 1fr; gap:14px; padding:11px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
   .dp-day:last-child{border-bottom:none;}
   .dp-date{color:var(--jade); font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.03em; white-space:nowrap; padding-top:2px;}
   .dp-text{color:var(--porcelain-dim); line-height:1.6;}
   .dp-text b{color:var(--porcelain); font-weight:600;}
   .dp-text .flag{margin-right:6px;}
+
+  /* food list — rows instead of flat bullets, dish name picked out */
+  .tp-food-item{padding:11px 0; border-bottom:1px dotted var(--line); font-size:12.5px; line-height:1.6;}
+  .tp-food-item:last-child{border-bottom:none;}
+  .tp-food-item .dish{color:var(--porcelain); font-weight:600;}
+  .tp-food-item .note{color:var(--porcelain-dim);}
+
   .tp-content ul{margin:0; padding-left:18px; font-size:12px; color:var(--porcelain-dim); line-height:1.6;}
   .tp-content ul li{margin-bottom:8px;}
   .tp-content ul li:last-child{margin-bottom:0;}
-  .tp-budget-item{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:9px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
+
+  /* budget list — category icon picked out from the label */
+  .tp-budget-item{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:10px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
   .tp-budget-item:last-of-type{border-bottom:none;}
-  .tp-budget-item .label{color:var(--porcelain-dim);}
+  .tp-budget-item .label{color:var(--porcelain-dim); display:inline-flex; align-items:baseline; gap:9px;}
+  .tp-budget-item .label .ico{color:var(--jade); font-size:11px; opacity:.9; flex-shrink:0;}
   .tp-budget-item .amount{color:var(--gold); font-family:'Oswald', sans-serif; white-space:nowrap; text-shadow:0 0 8px rgba(225,58,46,.4);}
   .tp-budget-note{font-size:11px; color:var(--porcelain-dim); margin-top:12px; opacity:.75; line-height:1.5;}
 
@@ -454,17 +469,15 @@
         <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>798 Art Zone</b><br><span class="d">Вход в сам квартал бесплатный, часть галерей — тоже. Бронь не нужна.</span></span></label>
       </div>
       <div class="tp-content" data-tab-content="food" hidden>
-        <ul>
-          <li>Утка по-пекински (Peking duck) — на Цяньмэнь или в проверенном ресторане, не у первой попавшейся вывески</li>
-          <li>Чжацзянмянь — лапша с соевой пастой</li>
-          <li>Цзянбин — уличный завтрак-блинчик с яйцом и хрустящей начинкой</li>
-          <li>Танхулу — засахаренные ягоды боярышника на палочке</li>
-        </ul>
+        <div class="tp-food-item"><span class="dish">Утка по-пекински</span> <span class="note">(Peking duck) — на Цяньмэнь или в проверенном ресторане, не у первой попавшейся вывески</span></div>
+        <div class="tp-food-item"><span class="dish">Чжацзянмянь</span> <span class="note">— лапша с соевой пастой</span></div>
+        <div class="tp-food-item"><span class="dish">Цзянбин</span> <span class="note">— уличный завтрак-блинчик с яйцом и хрустящей начинкой</span></div>
+        <div class="tp-food-item"><span class="dish">Танхулу</span> <span class="note">— засахаренные ягоды боярышника на палочке</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label">Перелёт Москва → Пекин</span><span class="amount">зависит от дат</span></div>
-        <div class="tp-budget-item"><span class="label">Билеты: Запретный город + Стена + Universal + Храм Неба</span><span class="amount">≈¥950—1100 ($130—155)</span></div>
-        <div class="tp-budget-item"><span class="label">Еда, в день на человека</span><span class="amount">≈¥150—350</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">✈</span>Перелёт Москва → Пекин</span><span class="amount">зависит от дат</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Билеты: Запретный город + Стена + Universal + Храм Неба</span><span class="amount">≈¥950—1100 ($130—155)</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Еда, в день на человека</span><span class="amount">≈¥150—350</span></div>
         <div class="tp-budget-note">Ориентировочно: входные цены не проверялись под конкретные даты — свериться перед поездкой.</div>
       </div>
     </div>
@@ -511,18 +524,16 @@
         <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Park Hyatt (87 этаж)</b><br><span class="d">Бронь не нужна, вход свободный — платишь только за чай/еду в лобби-баре (от ¥70). Дресс-код не строгий, но не спортивный костюм.</span></span></label>
       </div>
       <div class="tp-content" data-tab-content="food" hidden>
-        <ul>
-          <li>Сяолунбао — суп-дамплинги, есть аккуратно, бульон внутри горячий</li>
-          <li>Шэнцзянбао — жареные снизу пирожки с бульоном</li>
-          <li>Волосатый краб (大闸蟹) — октябрь-ноябрь как раз сезон, совпадает с датами поездки</li>
-          <li>Лапша с луковым маслом (cong you ban mian)</li>
-        </ul>
+        <div class="tp-food-item"><span class="dish">Сяолунбао</span> <span class="note">— суп-дамплинги, есть аккуратно, бульон внутри горячий</span></div>
+        <div class="tp-food-item"><span class="dish">Шэнцзянбао</span> <span class="note">— жареные снизу пирожки с бульоном</span></div>
+        <div class="tp-food-item"><span class="dish">Волосатый краб</span> <span class="note">(大闸蟹) — октябрь-ноябрь как раз сезон, совпадает с датами поездки</span></div>
+        <div class="tp-food-item"><span class="dish">Лапша с луковым маслом</span> <span class="note">(cong you ban mian)</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label">Поезд Пекин → Шанхай</span><span class="amount">¥300—650 ($40—90)</span></div>
-        <div class="tp-budget-item"><span class="label">Shanghai Tower, смотровая (по желанию)</span><span class="amount">≈¥180—220</span></div>
-        <div class="tp-budget-item"><span class="label">Юйюань + паром</span><span class="amount">≈¥42</span></div>
-        <div class="tp-budget-item"><span class="label">Еда, в день на человека</span><span class="amount">≈¥150—400</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🚄</span>Поезд Пекин → Шанхай</span><span class="amount">¥300—650 ($40—90)</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Shanghai Tower, смотровая (по желанию)</span><span class="amount">≈¥180—220</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Юйюань + паром</span><span class="amount">≈¥42</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Еда, в день на человека</span><span class="amount">≈¥150—400</span></div>
         <div class="tp-budget-note">Волосатый краб — разовый splurge ≈¥100—300 за штуку в зависимости от размера. Ориентировочно.</div>
       </div>
     </div>
@@ -570,17 +581,15 @@
         <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Театр Готай (Grand Theatre)</b><br><span class="d">Снаружи — бесплатно в любое время. Если хочешь попасть на спектакль внутри — отдельная бронь билетов под конкретную дату.</span></span></label>
       </div>
       <div class="tp-content" data-tab-content="food" hidden>
-        <ul>
-          <li>Хого (火锅) — Чунцин официально считается родиной этого блюда, острый бульон на говяжьем жире</li>
-          <li>Сяомянь — острая лапша, местный завтрак/обед</li>
-          <li>Чуань-чуань — уличная вариация хого на шпажках</li>
-        </ul>
+        <div class="tp-food-item"><span class="dish">Хого</span> <span class="note">(火锅) — Чунцин официально считается родиной этого блюда, острый бульон на говяжьем жире</span></div>
+        <div class="tp-food-item"><span class="dish">Сяомянь</span> <span class="note">— острая лапша, местный завтрак/обед</span></div>
+        <div class="tp-food-item"><span class="dish">Чуань-чуань</span> <span class="note">— уличная вариация хого на шпажках</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label">Перелёт Шанхай → Чунцин</span><span class="amount">$100—200</span></div>
-        <div class="tp-budget-item"><span class="label">Входные билеты</span><span class="amount">почти всё бесплатно</span></div>
-        <div class="tp-budget-item"><span class="label">Хого на двоих</span><span class="amount">≈¥150—300</span></div>
-        <div class="tp-budget-item"><span class="label">Сяомянь / чуань-чуань, разовый приём</span><span class="amount">≈¥20—50</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">✈</span>Перелёт Шанхай → Чунцин</span><span class="amount">$100—200</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Входные билеты</span><span class="amount">почти всё бесплатно</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Хого на двоих</span><span class="amount">≈¥150—300</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Сяомянь / чуань-чуань, разовый приём</span><span class="amount">≈¥20—50</span></div>
         <div class="tp-budget-note">Самый бюджетный город маршрута — большинство точек без входного билета.</div>
       </div>
     </div>
@@ -627,19 +636,17 @@
         <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Концерт The Weeknd</b><br><span class="d">Уже куплен — отдельно уточнить статус physical pickup, если схема через HK Ticketing hotline это требует.</span></span></label>
       </div>
       <div class="tp-content" data-tab-content="food" hidden>
-        <ul>
-          <li>Дим-сам — на завтрак/обед, не вечером (традиционно дневная еда)</li>
-          <li>Яичные вафли (gai daan jai) — уличный стрит-фуд</li>
-          <li>Char siu / жареный гусь — навынос или в лавках с подвешенными тушками в окне</li>
-          <li>Юаньян (yuenyeung) — смесь чая с кофе, местный напиток</li>
-        </ul>
+        <div class="tp-food-item"><span class="dish">Дим-сам</span> <span class="note">— на завтрак/обед, не вечером (традиционно дневная еда)</span></div>
+        <div class="tp-food-item"><span class="dish">Яичные вафли</span> <span class="note">(gai daan jai) — уличный стрит-фуд</span></div>
+        <div class="tp-food-item"><span class="dish">Char siu / жареный гусь</span> <span class="note">— навынос или в лавках с подвешенными тушками в окне</span></div>
+        <div class="tp-food-item"><span class="dish">Юаньян</span> <span class="note">(yuenyeung) — смесь чая с кофе, местный напиток</span></div>
       </div>
       <div class="tp-content" data-tab-content="budget" hidden>
-        <div class="tp-budget-item"><span class="label">Перелёт Чунцин → Гонконг</span><span class="amount">$80—250</span></div>
-        <div class="tp-budget-item"><span class="label">Жильё 22—25 окт</span><span class="amount">уже оплачено</span></div>
-        <div class="tp-budget-item"><span class="label">Билет The Weeknd</span><span class="amount">уже куплен</span></div>
-        <div class="tp-budget-item"><span class="label">Peak Tram, туда-обратно</span><span class="amount">≈HK$88—135</span></div>
-        <div class="tp-budget-item"><span class="label">Еда, приём пищи</span><span class="amount">≈HK$150—300</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">✈</span>Перелёт Чунцин → Гонконг</span><span class="amount">$80—250</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🏨</span>Жильё 22—25 окт</span><span class="amount">уже оплачено</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🎵</span>Билет The Weeknd</span><span class="amount">уже куплен</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🎫</span>Peak Tram, туда-обратно</span><span class="amount">≈HK$88—135</span></div>
+        <div class="tp-budget-item"><span class="label"><span class="ico">🍜</span>Еда, приём пищи</span><span class="amount">≈HK$150—300</span></div>
         <div class="tp-budget-note">Самый дорогой город маршрута из четырёх — закладывай отдельно на последние дни.</div>
       </div>
     </div>
