@@ -110,10 +110,11 @@
   }
   .h1-city{display:inline-flex; align-items:baseline; gap:9px; white-space:nowrap; text-transform:uppercase;}
   .h1-cn{
-    font-family:'IBM Plex Mono', monospace; font-size:.32em; letter-spacing:.03em;
-    text-transform:none; color:var(--jade); opacity:.85;
+    font-family:'IBM Plex Mono', monospace; font-size:1em; letter-spacing:.03em;
+    text-transform:none; color:var(--jade); opacity:1;
   }
-  h1 .arrow{color:var(--seal); font-weight:400; font-size:.65em; text-shadow:0 0 10px var(--seal);}
+  .h1-cn::after{content:' //'; opacity:.7;}
+  h1 .arrow{color:var(--seal); font-weight:400; font-size:.9em; text-shadow:0 0 10px var(--seal);}
   .sub{color:var(--porcelain-dim); font-size:14px; max-width:560px;}
   .datebar{
     margin-top:28px; display:flex; gap:0; flex-wrap:wrap; border:1px solid var(--line);
@@ -178,6 +179,7 @@
     font-family:'IBM Plex Mono', monospace; font-size:.45em; letter-spacing:.03em;
     text-transform:none; color:var(--jade); opacity:.8;
   }
+  .t-city-cn::after{content:' //'; opacity:.7;}
   .t-role{font-size:10.5px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold-dim); margin-bottom:14px;}
   .t-notes{font-size:12px; color:var(--porcelain-dim); max-width:420px;}
   .t-notes b{color:var(--porcelain); font-weight:500;}
@@ -276,12 +278,12 @@
   /* budget list — category tag (Chinese, teal) picked out from the label */
   .tp-budget-item{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:10px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
   .tp-budget-item:last-of-type{border-bottom:none;}
-  .tp-budget-item .label{color:var(--porcelain-dim); display:inline-flex; align-items:baseline; gap:2px;}
+  .tp-budget-item .label{color:var(--porcelain-dim); display:inline-flex; align-items:baseline;}
   .tp-budget-item .label .ico{
     color:var(--jade); font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.02em;
-    opacity:.85; flex-shrink:0;
+    opacity:.9; flex-shrink:0;
   }
-  .tp-budget-item .label .ico::before{content:'// '; opacity:.7;}
+  .tp-budget-item .label .ico::after{content:' // '; opacity:.7;}
   .tp-budget-item .amount{color:var(--gold); font-family:'Oswald', sans-serif; white-space:nowrap; text-shadow:0 0 8px rgba(225,58,46,.4);}
   .tp-budget-note{font-size:11px; color:var(--porcelain-dim); margin-top:12px; opacity:.75; line-height:1.5;}
 
@@ -360,10 +362,10 @@
       <div class="term-tag">DRAFT_V0.9 · 草稿</div>
     </div>
     <h1>
-      <span class="h1-city">Beijing<span class="h1-cn">// 北京</span></span><span class="arrow">→</span>
-      <span class="h1-city">Shanghai<span class="h1-cn">// 上海</span></span><span class="arrow">→</span>
-      <span class="h1-city">Chongqing<span class="h1-cn">// 重庆</span></span><span class="arrow">→</span>
-      <span class="h1-city">Hong Kong<span class="h1-cn">// 香港</span></span>
+      <span class="h1-city">Beijing<span class="h1-cn">北京</span></span><span class="arrow">→</span>
+      <span class="h1-city">Shanghai<span class="h1-cn">上海</span></span><span class="arrow">→</span>
+      <span class="h1-city">Chongqing<span class="h1-cn">重庆</span></span><span class="arrow">→</span>
+      <span class="h1-city">Hong Kong<span class="h1-cn">香港</span></span>
     </h1>
     <p class="sub">17 дней, отсчёт от вылета из Москвы до возврата. Якорь маршрута — концерт The Weeknd в Гонконге, 24 октября. Всё остальное выстроено вокруг этой даты.</p>
     <div class="datebar">
@@ -439,7 +441,7 @@
         <div class="range">заезд вечер 9→10</div>
       </div>
       <div class="t-body">
-        <div class="t-city">Beijing<span class="t-city-cn">// 北京</span></div>
+        <div class="t-city">Beijing<span class="t-city-cn">北京</span></div>
         <div class="t-role">Императорский центр + один день вне программы</div>
         <div class="t-notes">5 дней: Запретный город, Стена, Храм Неба, хутуны, 798 Art Zone — и отдельный полный день под <b>Universal Studios Beijing</b> (Тонджоу, 45-70 мин в одну сторону от центра). CBD сознательно исключён — дублировал бы ночной скайлайн Шанхая и Гонконга, которые уже есть в маршруте.</div>
         <div class="t-flags"><span class="flag ok">CBD убран</span><span class="flag warn">Universal = полный день, как Стена</span></div>
@@ -495,7 +497,7 @@
         <div class="range">заезд днём 15-го</div>
       </div>
       <div class="t-body">
-        <div class="t-city">Shanghai<span class="t-city-cn">// 上海</span></div>
+        <div class="t-city">Shanghai<span class="t-city-cn">上海</span></div>
         <div class="t-role">Контраст эпох</div>
         <div class="t-notes">Вайтань и Пудун в одном развороте — колониальная застройка 1920-х против леса небоскрёбов. Дневной поезд из Пекина освобождает вторую половину дня 15-го — больше времени, чем давал бы перелёт с трансфером.</div>
         <div class="t-flags"><span class="flag">4 полных дня по календарю</span><span class="flag ok">~4 дня реально</span></div>
@@ -551,7 +553,7 @@
         <div class="range">+ вечер 19-го</div>
       </div>
       <div class="t-body">
-        <div class="t-city">Chongqing<span class="t-city-cn">// 重庆</span></div>
+        <div class="t-city">Chongqing<span class="t-city-cn">重庆</span></div>
         <div class="t-role">Ночной город · выбран сознательно</div>
         <div class="t-notes">Приоритет — <b>ночной визуал</b> (Хунъядун, эстакады, туман), но дневные часы 20-21 теперь тоже заполнены (Цзефанбэй, Чаотяньмэнь, Шаньчэнсян, театр Готай) — все точки центральные, без больших переездов. Утро дня отъезда (22-е) съедено транзитом с погранконтролем — при цели «ночной вид» это несущественная потеря.</div>
         <div class="t-flags"><span class="flag warn">утро 22-го потеряно</span><span class="flag ok">не критично при этой цели</span></div>
@@ -607,7 +609,7 @@
         <div class="range">бронь жилья 22—25</div>
       </div>
       <div class="t-body">
-        <div class="t-city">Hong Kong<span class="t-city-cn">// 香港</span></div>
+        <div class="t-city">Hong Kong<span class="t-city-cn">香港</span></div>
         <div class="t-role">Якорь всей поездки</div>
         <div class="t-notes">Концерт The Weeknd, Kai Tak Stadium, вечер 24 октября. Вылет домой — 25-го в 19:00, буфер после концерта ~15—19 часов.</div>
         <div class="t-flags"><span class="flag ok">буфер после концерта в норме</span></div>
