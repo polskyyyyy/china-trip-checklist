@@ -199,61 +199,44 @@
   .transit-row .line{flex:1; height:0; border-top:1px dotted var(--porcelain-dim); opacity:.4;}
   .transit-row .mode{color:var(--jade); letter-spacing:.05em; white-space:nowrap;}
 
-  /* ---------- BUDGET ---------- */
-  section.budget{padding:56px 0; border-top:1px solid var(--line);}
-  table{width:100%; border-collapse:collapse; font-size:12.5px;}
-  th{
-    text-align:left; font-weight:500; text-transform:uppercase; letter-spacing:.08em; font-size:10px;
-    color:var(--porcelain-dim); padding:10px 12px; border-bottom:1px solid var(--line);
+  .stack-total{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px 16px;
+    margin-top:8px; padding:16px 20px; border:1px solid var(--line); font-size:12px; color:var(--porcelain-dim);
   }
-  td{padding:14px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
-  tr:last-child td{border-bottom:none;}
-  td.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:15px; white-space:nowrap; text-shadow:0 0 10px rgba(225,58,46,.45);}
-  td.route{color:var(--porcelain);}
-  td.note{color:var(--porcelain-dim); font-size:11.5px;}
+  .stack-total .amount{font-family:'Oswald', sans-serif; font-size:18px; color:var(--gold); text-shadow:0 0 10px rgba(225,58,46,.5);}
 
-  .total-row td{border-top:1px solid var(--porcelain-dim); font-weight:600;}
-  .total-row td.num{font-size:19px;}
+  /* ---------- TICKET ACCORDION / TABS ---------- */
+  .t-expand{
+    margin-top:12px; display:flex; align-items:center; gap:7px;
+    font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--jade); opacity:.8;
+  }
+  .chev{display:inline-block; font-size:11px; transition:transform .2s ease;}
+  .ticket.open .chev{transform:rotate(180deg);}
+  .ticket-panel{
+    border:1px solid var(--line); border-top:none; background:var(--ink-2);
+    padding:20px 22px 26px; margin:-4px 0 22px; animation:panelIn .18s ease;
+  }
+  @keyframes panelIn{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
+  .tp-tabs{display:flex; gap:4px 18px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:18px;}
+  .tp-tab{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.07em; text-transform:uppercase;
+    background:none; border:none; border-bottom:2px solid transparent; color:var(--porcelain-dim);
+    padding:9px 2px; margin-bottom:-1px; cursor:pointer;
+  }
+  .tp-tab:hover{color:var(--porcelain);}
+  .tp-tab.active{color:var(--gold); border-bottom-color:var(--gold);}
+  .tp-content ul{margin:0; padding-left:18px; font-size:12px; color:var(--porcelain-dim); line-height:1.6;}
+  .tp-content ul li{margin-bottom:8px;}
+  .tp-content ul li:last-child{margin-bottom:0;}
+  .tp-budget-item{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:9px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
+  .tp-budget-item:last-of-type{border-bottom:none;}
+  .tp-budget-item .label{color:var(--porcelain-dim);}
+  .tp-budget-item .amount{color:var(--gold); font-family:'Oswald', sans-serif; white-space:nowrap; text-shadow:0 0 8px rgba(225,58,46,.4);}
+  .tp-budget-note{font-size:11px; color:var(--porcelain-dim); margin-top:12px; opacity:.75; line-height:1.5;}
 
-  /* ---------- OPEN ITEMS ---------- */
+  /* ---------- OPEN ITEMS (legacy, unused card style kept for reference) ---------- */
   section.open{padding:0 0 72px;}
-  .open-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
-  .open-item{background:var(--ink); padding:22px;}
-  .open-item .n{font-family:'Oswald', sans-serif; color:var(--gold); font-size:13px; margin-bottom:8px; text-shadow:0 0 8px rgba(225,58,46,.45);}
-  .open-item .d{font-size:12px; color:var(--porcelain-dim);}
-
-  /* ---------- DAY PLAN ---------- */
-  section.dayplan{padding:56px 0; border-top:1px solid var(--line);}
-  .dp-city{margin-bottom:34px;}
-  .dp-city-name{
-    font-family:'Oswald', sans-serif; font-size:19px; color:var(--gold); margin-bottom:10px;
-    padding-bottom:8px; border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.06em;
-    text-shadow:0 0 12px rgba(225,58,46,.45);
-  }
-  .dp-day{display:grid; grid-template-columns:70px 1fr; gap:16px; padding:10px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
-  .dp-day:last-child{border-bottom:none;}
-  .dp-date{color:var(--jade); font-family:'IBM Plex Mono'; white-space:nowrap; padding-top:1px;}
-  .dp-text{color:var(--porcelain-dim); line-height:1.6;}
-  .dp-text b{color:var(--porcelain); font-weight:500;}
-  .dp-text .flag{margin-right:6px;}
-
-  /* ---------- POI / BOOKING ---------- */
-  section.poi{padding:56px 0; border-top:1px solid var(--line);}
-  .poi-city{margin-bottom:32px;}
-  .poi-city-name{
-    font-family:'Oswald', sans-serif; font-size:19px; color:var(--gold); margin-bottom:10px;
-    padding-bottom:8px; border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.06em;
-    text-shadow:0 0 12px rgba(225,58,46,.45);
-  }
-
-  /* ---------- FOOD ---------- */
-  section.food{padding:56px 0; border-top:1px solid var(--line);}
-  .food-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
-  .food-card{background:var(--ink); padding:22px;}
-  .food-city{font-family:'Oswald', sans-serif; font-size:16px; color:var(--gold); margin-bottom:12px; text-transform:uppercase; letter-spacing:.05em; text-shadow:0 0 10px rgba(225,58,46,.45);}
-  .food-card ul{margin:0; padding-left:18px; font-size:12px; color:var(--porcelain-dim); line-height:1.6;}
-  .food-card li{margin-bottom:8px;}
-  .food-card li:last-child{margin-bottom:0;}
 
   /* ---------- PREP ---------- */
   section.prep{padding:56px 0; border-top:1px solid var(--line);}
@@ -392,6 +375,7 @@
 
   <section class="stack">
     <div class="section-title"><span class="num">02</span> Раскладка по городам <span class="term-tag" style="margin-left:auto;">TRANSIT.LOG · 过境记录</span></div>
+    <p class="sub" style="margin:-14px 0 22px;">Нажми на карточку города — раскроются день за днём, брони, еда и бюджет.</p>
 
     <!-- BEIJING -->
     <div class="ticket">
@@ -404,10 +388,48 @@
         <div class="t-role">Императорский центр + один день вне программы</div>
         <div class="t-notes">5 дней: Запретный город, Стена, Храм Неба, хутуны, 798 Art Zone — и отдельный полный день под <b>Universal Studios Beijing</b> (Тонджоу, 45-70 мин в одну сторону от центра). CBD сознательно исключён — дублировал бы ночной скайлайн Шанхая и Гонконга, которые уже есть в маршруте.</div>
         <div class="t-flags"><span class="flag ok">CBD убран</span><span class="flag warn">Universal = полный день, как Стена</span></div>
+        <div class="t-expand"><span class="chev">▾</span> День за днём · брони · еда · бюджет</div>
       </div>
       <div class="t-stamp">
         <div class="stamp">MOW<br>→<br>PEK</div>
         <div class="t-transit">перелёт<br><span class="hrs">~8ч</span> + пересадка часового пояса</div>
+      </div>
+    </div>
+    <div class="ticket-panel" id="panel-beijing" hidden>
+      <div class="tp-tabs">
+        <button class="tp-tab active" type="button" data-tab="days">День за днём</button>
+        <button class="tp-tab" type="button" data-tab="poi">Брони</button>
+        <button class="tp-tab" type="button" data-tab="food">Еда</button>
+        <button class="tp-tab" type="button" data-tab="budget">Бюджет</button>
+      </div>
+      <div class="tp-content" data-tab-content="days">
+        <div class="dp-day"><span class="dp-date">10 окт</span><span class="dp-text">Тяньаньмэнь (проверить требования на вход заранее) → Запретный город → Цзиньшань (сразу за северным выходом) → Ванфуцзин</span></div>
+        <div class="dp-day"><span class="dp-date">11 окт</span><span class="dp-text">Храм Неба → Цяньмэнь стрит → вечер: Хоухай</span></div>
+        <div class="dp-day"><span class="dp-date">12 окт</span><span class="dp-text">Великая стена, Мутяньюй — полный день</span></div>
+        <div class="dp-day"><span class="dp-date">13 окт</span><span class="dp-text"><b>Universal Studios Beijing</b> — полный день</span></div>
+        <div class="dp-day"><span class="dp-date">14 окт</span><span class="dp-text">Хутуны + Барабанная/Колокольная башни → Храм Ламы → 798 Art Zone</span></div>
+      </div>
+      <div class="tp-content" data-tab-content="poi" hidden>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Запретный город</b><br><span class="d">Билет с датой и временным слотом — раскупается, брать за 1-2 недели. Официальный сайт или касса продают ограниченное число на день.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Великая стена (Мутяньюй)</b><br><span class="d">Входной билет + канатная дорога отдельно. Трансфер/тур можно взять на месте, но в пик сезона лучше забронировать заранее.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Universal Studios Beijing</b><br><span class="d">Билет привязывается к конкретной дате входа (timed entry) — покупать заранее через официальное приложение/сайт, не на месте.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Храм Неба</b><br><span class="d">Комбинированный билет, обычно доступен и в день визита, но лучше проверить онлайн-продажу заранее.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Хутуны / Барабанная и Колокольная башни</b><br><span class="d">Билет на башни — на месте, очередей обычно немного.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>798 Art Zone</b><br><span class="d">Вход в сам квартал бесплатный, часть галерей — тоже. Бронь не нужна.</span></span></label>
+      </div>
+      <div class="tp-content" data-tab-content="food" hidden>
+        <ul>
+          <li>Утка по-пекински (Peking duck) — на Цяньмэнь или в проверенном ресторане, не у первой попавшейся вывески</li>
+          <li>Чжацзянмянь — лапша с соевой пастой</li>
+          <li>Цзянбин — уличный завтрак-блинчик с яйцом и хрустящей начинкой</li>
+          <li>Танхулу — засахаренные ягоды боярышника на палочке</li>
+        </ul>
+      </div>
+      <div class="tp-content" data-tab-content="budget" hidden>
+        <div class="tp-budget-item"><span class="label">Перелёт Москва → Пекин</span><span class="amount">зависит от дат</span></div>
+        <div class="tp-budget-item"><span class="label">Билеты: Запретный город + Стена + Universal + Храм Неба</span><span class="amount">≈¥950—1100 ($130—155)</span></div>
+        <div class="tp-budget-item"><span class="label">Еда, в день на человека</span><span class="amount">≈¥150—350</span></div>
+        <div class="tp-budget-note">Ориентировочно: входные цены не проверялись под конкретные даты — свериться перед поездкой.</div>
       </div>
     </div>
 
@@ -424,10 +446,48 @@
         <div class="t-role">Контраст эпох</div>
         <div class="t-notes">Вайтань и Пудун в одном развороте — колониальная застройка 1920-х против леса небоскрёбов. Дневной поезд из Пекина освобождает вторую половину дня 15-го — больше времени, чем давал бы перелёт с трансфером.</div>
         <div class="t-flags"><span class="flag">4 полных дня по календарю</span><span class="flag ok">~4 дня реально</span></div>
+        <div class="t-expand"><span class="chev">▾</span> День за днём · брони · еда · бюджет</div>
       </div>
       <div class="t-stamp">
         <div class="stamp">PEK<br>→<br>SHA</div>
         <div class="t-transit">поезд G (дневной)<br><span class="hrs">~4.5—5ч</span> суммарно</div>
+      </div>
+    </div>
+    <div class="ticket-panel" id="panel-shanghai" hidden>
+      <div class="tp-tabs">
+        <button class="tp-tab active" type="button" data-tab="days">День за днём</button>
+        <button class="tp-tab" type="button" data-tab="poi">Брони</button>
+        <button class="tp-tab" type="button" data-tab="food">Еда</button>
+        <button class="tp-tab" type="button" data-tab="budget">Бюджет</button>
+      </div>
+      <div class="tp-content" data-tab-content="days">
+        <div class="dp-day"><span class="dp-date">15 окт</span><span class="dp-text">поезд из Пекина, прибытие днём → заселение → Народная площадь → короткий крюк на запад: <b>Starbucks Reserve Roastery</b> (Западная Наньцзин Лу) → Народный парк (опционально) → обратно через площадь и вниз по восточной <b>Наньцзин Лу</b> (пешеходная, будний день — толпы меньше) → вечер: Вайтань, Русское консульство, мост Вайбайду, бык</span></div>
+        <div class="dp-day"><span class="dp-date">16 окт</span><span class="dp-text">Синьтяньди → Плаза-парк → Французская концессия → вечер: Тяньцзыфан (бары, ужин)</span></div>
+        <div class="dp-day"><span class="dp-date">17 окт</span><span class="dp-text"><span class="flag warn">сб — плотный день</span> Юйюань → <b>паром через Хуанпу на закате</b> → Пудун, <b>бесплатная смотровая Park Hyatt (87 этаж)</b> → <b>вечер: клуб — INS или TAXX, решить на месте</b></span></div>
+        <div class="dp-day"><span class="dp-date">18 окт</span><span class="dp-text">лёгкий день, свободное время — восстановление перед переездом (после клубной ночи и насыщенного 17-го это не формальность, а необходимость)</span></div>
+        <div class="dp-day"><span class="dp-date">19 окт</span><span class="dp-text">сборы, перелёт в Чунцин</span></div>
+      </div>
+      <div class="tp-content" data-tab-content="poi" hidden>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Shanghai Tower / Jin Mao</b><br><span class="d">Если хочешь подняться наверх (не только вид с набережной) — билет лучше взять заранее, особенно на закатное время.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Юйюань (сад)</b><br><span class="d">Билет на месте, очереди возможны в выходные.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Круиз по Хуанпу (опционально)</b><br><span class="d">Вечерний круиз с видом на Вайтань/Пудун — бронировать заранее на конкретный сеанс, если интересно.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Паром через Хуанпу</b><br><span class="d">Бронь не нужна — ¥2 через Alipay или монетами без сдачи. Лучшее время — закат.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Park Hyatt (87 этаж)</b><br><span class="d">Бронь не нужна, вход свободный — платишь только за чай/еду в лобби-баре (от ¥70). Дресс-код не строгий, но не спортивный костюм.</span></span></label>
+      </div>
+      <div class="tp-content" data-tab-content="food" hidden>
+        <ul>
+          <li>Сяолунбао — суп-дамплинги, есть аккуратно, бульон внутри горячий</li>
+          <li>Шэнцзянбао — жареные снизу пирожки с бульоном</li>
+          <li>Волосатый краб (大闸蟹) — октябрь-ноябрь как раз сезон, совпадает с датами поездки</li>
+          <li>Лапша с луковым маслом (cong you ban mian)</li>
+        </ul>
+      </div>
+      <div class="tp-content" data-tab-content="budget" hidden>
+        <div class="tp-budget-item"><span class="label">Поезд Пекин → Шанхай</span><span class="amount">¥300—650 ($40—90)</span></div>
+        <div class="tp-budget-item"><span class="label">Shanghai Tower, смотровая (по желанию)</span><span class="amount">≈¥180—220</span></div>
+        <div class="tp-budget-item"><span class="label">Юйюань + паром</span><span class="amount">≈¥42</span></div>
+        <div class="tp-budget-item"><span class="label">Еда, в день на человека</span><span class="amount">≈¥150—400</span></div>
+        <div class="tp-budget-note">Волосатый краб — разовый splurge ≈¥100—300 за штуку в зависимости от размера. Ориентировочно.</div>
       </div>
     </div>
 
@@ -444,10 +504,48 @@
         <div class="t-role">Ночной город · выбран сознательно</div>
         <div class="t-notes">Приоритет — <b>ночной визуал</b> (Хунъядун, эстакады, туман), но дневные часы 20-21 теперь тоже заполнены (Цзефанбэй, Чаотяньмэнь, Шаньчэнсян, театр Готай) — все точки центральные, без больших переездов. Утро дня отъезда (22-е) съедено транзитом с погранконтролем — при цели «ночной вид» это несущественная потеря.</div>
         <div class="t-flags"><span class="flag warn">утро 22-го потеряно</span><span class="flag ok">не критично при этой цели</span></div>
+        <div class="t-expand"><span class="chev">▾</span> День за днём · брони · еда · бюджет</div>
       </div>
       <div class="t-stamp">
         <div class="stamp">SHA<br>→<br>CKG</div>
         <div class="t-transit">регистрация + перелёт<br><span class="hrs">~4.5—5ч</span> суммарно</div>
+      </div>
+    </div>
+    <div class="ticket-panel" id="panel-chongqing" hidden>
+      <div class="tp-tabs">
+        <button class="tp-tab active" type="button" data-tab="days">День за днём</button>
+        <button class="tp-tab" type="button" data-tab="poi">Брони</button>
+        <button class="tp-tab" type="button" data-tab="food">Еда</button>
+        <button class="tp-tab" type="button" data-tab="budget">Бюджет</button>
+      </div>
+      <div class="tp-content" data-tab-content="days">
+        <div class="dp-day"><span class="dp-date">19 окт</span><span class="dp-text">заезд вечером — Хунъядун ночью</span></div>
+        <div class="dp-day"><span class="dp-date">20 окт</span><span class="dp-text">днём: <b>Цзефанбэй</b> (центральная площадь) → <b>Raffles City + набережная Чаотяньмэнь</b> (слияние Янцзы и Цзялинцзян) → вечер: станция Лицзыба + смотровая Хуанцзюэвань</span></div>
+        <div class="dp-day"><span class="dp-date">21 окт</span><span class="dp-text">днём: <b>Шаньчэнсян</b> (старый переулок, французская церковь Rén'ài, кофейни в бомбоубежищах, вид на реку — меньше толп, чем на Хунъядуне) → <b>театр Готай</b> (Grand Theatre) → вечер: повторный заход на Хунъядун / речной круиз (если нужен — отдельная бронь)</span></div>
+        <div class="dp-day"><span class="dp-date">22 окт</span><span class="dp-text">утро — переезд в Гонконг, съедает весь день</span></div>
+      </div>
+      <div class="tp-content" data-tab-content="poi" hidden>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Хунъядун</b><br><span class="d">Вход свободный, бронь не нужна — приходить ближе к закату, чтобы застать переход в ночную подсветку.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Станция Лицзыба</b><br><span class="d">Обычная станция метро — бронь не нужна, только жетон/карта на проезд.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая на развязку Хуанцзюэвань</b><br><span class="d">Бесплатная площадка, бронь не нужна.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Цзефанбэй</b><br><span class="d">Открытая площадь, бронь не нужна.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Raffles City / Чаотяньмэнь</b><br><span class="d">Смотровая площадка на крыше комплекса — вход обычно свободный, но лучше уточнить на месте, иногда закрыта для непостояльцев отеля.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Шаньчэнсян</b><br><span class="d">Вход свободный, бронь не нужна. Лучше в мягкой обуви — много лестниц, скользко после дождя.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Театр Готай (Grand Theatre)</b><br><span class="d">Снаружи — бесплатно в любое время. Если хочешь попасть на спектакль внутри — отдельная бронь билетов под конкретную дату.</span></span></label>
+      </div>
+      <div class="tp-content" data-tab-content="food" hidden>
+        <ul>
+          <li>Хого (火锅) — Чунцин официально считается родиной этого блюда, острый бульон на говяжьем жире</li>
+          <li>Сяомянь — острая лапша, местный завтрак/обед</li>
+          <li>Чуань-чуань — уличная вариация хого на шпажках</li>
+        </ul>
+      </div>
+      <div class="tp-content" data-tab-content="budget" hidden>
+        <div class="tp-budget-item"><span class="label">Перелёт Шанхай → Чунцин</span><span class="amount">$100—200</span></div>
+        <div class="tp-budget-item"><span class="label">Входные билеты</span><span class="amount">почти всё бесплатно</span></div>
+        <div class="tp-budget-item"><span class="label">Хого на двоих</span><span class="amount">≈¥150—300</span></div>
+        <div class="tp-budget-item"><span class="label">Сяомянь / чуань-чуань, разовый приём</span><span class="amount">≈¥20—50</span></div>
+        <div class="tp-budget-note">Самый бюджетный город маршрута — большинство точек без входного билета.</div>
       </div>
     </div>
 
@@ -464,146 +562,31 @@
         <div class="t-role">Якорь всей поездки</div>
         <div class="t-notes">Концерт The Weeknd, Kai Tak Stadium, вечер 24 октября. Вылет домой — 25-го в 19:00, буфер после концерта ~15—19 часов.</div>
         <div class="t-flags"><span class="flag ok">буфер после концерта в норме</span></div>
+        <div class="t-expand"><span class="chev">▾</span> День за днём · брони · еда · бюджет</div>
       </div>
       <div class="t-stamp">
         <div class="stamp">HKG<br>→<br>MOW</div>
         <div class="t-transit">вылет 25 окт<br><span class="hrs">19:00</span></div>
       </div>
     </div>
-  </section>
-
-  <section class="dayplan">
-    <div class="section-title"><span class="num">03</span> Программа по дням</div>
-
-    <div class="dp-city">
-      <div class="dp-city-name">Пекин</div>
-      <div class="dp-day"><span class="dp-date">10 окт</span><span class="dp-text">Тяньаньмэнь (проверить требования на вход заранее) → Запретный город → Цзиньшань (сразу за северным выходом) → Ванфуцзин</span></div>
-      <div class="dp-day"><span class="dp-date">11 окт</span><span class="dp-text">Храм Неба → Цяньмэнь стрит → вечер: Хоухай</span></div>
-      <div class="dp-day"><span class="dp-date">12 окт</span><span class="dp-text">Великая стена, Мутяньюй — полный день</span></div>
-      <div class="dp-day"><span class="dp-date">13 окт</span><span class="dp-text"><b>Universal Studios Beijing</b> — полный день</span></div>
-      <div class="dp-day"><span class="dp-date">14 окт</span><span class="dp-text">Хутуны + Барабанная/Колокольная башни → Храм Ламы → 798 Art Zone</span></div>
-    </div>
-
-    <div class="dp-city">
-      <div class="dp-city-name">Шанхай</div>
-      <div class="dp-day"><span class="dp-date">15 окт</span><span class="dp-text">поезд из Пекина, прибытие днём → заселение → Народная площадь → короткий крюк на запад: <b>Starbucks Reserve Roastery</b> (Западная Наньцзин Лу) → Народный парк (опционально) → обратно через площадь и вниз по восточной <b>Наньцзин Лу</b> (пешеходная, будний день — толпы меньше) → вечер: Вайтань, Русское консульство, мост Вайбайду, бык</span></div>
-      <div class="dp-day"><span class="dp-date">16 окт</span><span class="dp-text">Синьтяньди → Плаза-парк → Французская концессия → вечер: Тяньцзыфан (бары, ужин)</span></div>
-      <div class="dp-day"><span class="dp-date">17 окт</span><span class="dp-text"><span class="flag warn">сб — плотный день</span> Юйюань → <b>паром через Хуанпу на закате</b> → Пудун, <b>бесплатная смотровая Park Hyatt (87 этаж)</b> → <b>вечер: клуб — INS или TAXX, решить на месте</b></span></div>
-      <div class="dp-day"><span class="dp-date">18 окт</span><span class="dp-text">лёгкий день, свободное время — восстановление перед переездом (после клубной ночи и насыщенного 17-го это не формальность, а необходимость)</span></div>
-      <div class="dp-day"><span class="dp-date">19 окт</span><span class="dp-text">сборы, перелёт в Чунцин</span></div>
-    </div>
-
-    <div class="dp-city">
-      <div class="dp-city-name">Чунцин</div>
-      <div class="dp-day"><span class="dp-date">19 окт</span><span class="dp-text">заезд вечером — Хунъядун ночью</span></div>
-      <div class="dp-day"><span class="dp-date">20 окт</span><span class="dp-text">днём: <b>Цзефанбэй</b> (центральная площадь) → <b>Raffles City + набережная Чаотяньмэнь</b> (слияние Янцзы и Цзялинцзян) → вечер: станция Лицзыба + смотровая Хуанцзюэвань</span></div>
-      <div class="dp-day"><span class="dp-date">21 окт</span><span class="dp-text">днём: <b>Шаньчэнсян</b> (старый переулок, французская церковь Rén'ài, кофейни в бомбоубежищах, вид на реку — меньше толп, чем на Хунъядуне) → <b>театр Готай</b> (Grand Theatre) → вечер: повторный заход на Хунъядун / речной круиз (если нужен — отдельная бронь)</span></div>
-      <div class="dp-day"><span class="dp-date">22 окт</span><span class="dp-text">утро — переезд в Гонконг, съедает весь день</span></div>
-    </div>
-
-    <div class="dp-city">
-      <div class="dp-city-name">Гонконг</div>
-      <div class="dp-day"><span class="dp-date">22 окт</span><span class="dp-text">заезд ~13:00 → вечер: набережная Цим Ша Цуй / Avenue of Stars</span></div>
-      <div class="dp-day"><span class="dp-date">23 окт</span><span class="dp-text">Пик Виктория днём → рынки Коулуна вечером</span></div>
-      <div class="dp-day"><span class="dp-date">24 окт</span><span class="dp-text"><b>чил-день</b>, намеренно разгружен → вечер: концерт The Weeknd</span></div>
-      <div class="dp-day"><span class="dp-date">25 окт</span><span class="dp-text">свободное утро → вылет 19:00</span></div>
-    </div>
-  </section>
-
-  <section class="budget">
-    <div class="section-title"><span class="num">04</span> Внутренние перелёты — деньги и время <span class="term-tag" style="margin-left:auto;">BUDGET.LOG · 预算数据</span></div>
-    <table>
-      <thead>
-        <tr><th>Участок</th><th>Способ</th><th>Время в пути</th><th>Реальные потери (с буфером)</th><th>Цена, эконом</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="route">Пекин → Шанхай</td><td class="note">поезд G (дневной)</td><td class="note">4ч18м—4.5ч</td><td class="note">~4.5—5ч</td><td class="num">¥300—650 (~$40—90)</td></tr>
-        <tr><td class="route">Шанхай → Чунцин</td><td class="note">самолёт</td><td class="note">2.5—3ч</td><td class="note">~4.5—5ч</td><td class="num">$100—200</td></tr>
-        <tr><td class="route">Чунцин → Гонконг</td><td class="note">самолёт</td><td class="note">2.5ч</td><td class="note">~4.5—5ч (погранконтроль)</td><td class="num">$80—250</td></tr>
-        <tr class="total-row"><td class="route">Итого, 2 внутр. перелёта + 1 поезд</td><td></td><td></td><td class="note">~13.5—15ч транзита суммарно</td><td class="num">$220—540</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="poi">
-    <div class="section-title"><span class="num">05</span> Точки интереса и что бронировать заранее</div>
-
-    <div class="poi-city">
-      <div class="poi-city-name">Пекин</div>
-      <div class="poi-list">
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Запретный город</b><br><span class="d">Билет с датой и временным слотом — раскупается, брать за 1-2 недели. Официальный сайт или касса продают ограниченное число на день.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Великая стена (Мутяньюй)</b><br><span class="d">Входной билет + канатная дорога отдельно. Трансфер/тур можно взять на месте, но в пик сезона лучше забронировать заранее.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Universal Studios Beijing</b><br><span class="d">Билет привязывается к конкретной дате входа (timed entry) — покупать заранее через официальное приложение/сайт, не на месте.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Храм Неба</b><br><span class="d">Комбинированный билет, обычно доступен и в день визита, но лучше проверить онлайн-продажу заранее.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Хутуны / Барабанная и Колокольная башни</b><br><span class="d">Билет на башни — на месте, очередей обычно немного.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>798 Art Zone</b><br><span class="d">Вход в сам квартал бесплатный, часть галерей — тоже. Бронь не нужна.</span></span></label>
+    <div class="ticket-panel" id="panel-hongkong" hidden>
+      <div class="tp-tabs">
+        <button class="tp-tab active" type="button" data-tab="days">День за днём</button>
+        <button class="tp-tab" type="button" data-tab="poi">Брони</button>
+        <button class="tp-tab" type="button" data-tab="food">Еда</button>
+        <button class="tp-tab" type="button" data-tab="budget">Бюджет</button>
       </div>
-    </div>
-
-    <div class="poi-city">
-      <div class="poi-city-name">Шанхай</div>
-      <div class="poi-list">
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Shanghai Tower / Jin Mao</b><br><span class="d">Если хочешь подняться наверх (не только вид с набережной) — билет лучше взять заранее, особенно на закатное время.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Юйюань (сад)</b><br><span class="d">Билет на месте, очереди возможны в выходные.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Круиз по Хуанпу (опционально)</b><br><span class="d">Вечерний круиз с видом на Вайтань/Пудун — бронировать заранее на конкретный сеанс, если интересно.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Паром через Хуанпу</b><br><span class="d">Бронь не нужна — ¥2 через Alipay или монетами без сдачи. Лучшее время — закат.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Park Hyatt (87 этаж)</b><br><span class="d">Бронь не нужна, вход свободный — платишь только за чай/еду в лобби-баре (от ¥70). Дресс-код не строгий, но не спортивный костюм.</span></span></label>
+      <div class="tp-content" data-tab-content="days">
+        <div class="dp-day"><span class="dp-date">22 окт</span><span class="dp-text">заезд ~13:00 → вечер: набережная Цим Ша Цуй / Avenue of Stars</span></div>
+        <div class="dp-day"><span class="dp-date">23 окт</span><span class="dp-text">Пик Виктория днём → рынки Коулуна вечером</span></div>
+        <div class="dp-day"><span class="dp-date">24 окт</span><span class="dp-text"><b>чил-день</b>, намеренно разгружен → вечер: концерт The Weeknd</span></div>
+        <div class="dp-day"><span class="dp-date">25 окт</span><span class="dp-text">свободное утро → вылет 19:00</span></div>
       </div>
-    </div>
-
-    <div class="poi-city">
-      <div class="poi-city-name">Чунцин</div>
-      <div class="poi-list">
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Хунъядун</b><br><span class="d">Вход свободный, бронь не нужна — приходить ближе к закату, чтобы застать переход в ночную подсветку.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Станция Лицзыба</b><br><span class="d">Обычная станция метро — бронь не нужна, только жетон/карта на проезд.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая на развязку Хуанцзюэвань</b><br><span class="d">Бесплатная площадка, бронь не нужна.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Цзефанбэй</b><br><span class="d">Открытая площадь, бронь не нужна.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Raffles City / Чаотяньмэнь</b><br><span class="d">Смотровая площадка на крыше комплекса — вход обычно свободный, но лучше уточнить на месте, иногда закрыта для непостояльцев отеля.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Шаньчэнсян</b><br><span class="d">Вход свободный, бронь не нужна. Лучше в мягкой обуви — много лестниц, скользко после дождя.</span></span></label>
-        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Театр Готай (Grand Theatre)</b><br><span class="d">Снаружи — бесплатно в любое время. Если хочешь попасть на спектакль внутри — отдельная бронь билетов под конкретную дату.</span></span></label>
-      </div>
-    </div>
-
-    <div class="poi-city">
-      <div class="poi-city-name">Гонконг</div>
-      <div class="poi-list">
+      <div class="tp-content" data-tab-content="poi" hidden>
         <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Пик Виктория (если едешь)</b><br><span class="d">Трамвай Peak Tram — очереди большие, билет с таймслотом лучше взять заранее онлайн.</span></span></label>
         <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Концерт The Weeknd</b><br><span class="d">Уже куплен — отдельно уточнить статус physical pickup, если схема через HK Ticketing hotline это требует.</span></span></label>
       </div>
-    </div>
-  </section>
-
-  <section class="food">
-    <div class="section-title"><span class="num">06</span> Что попробовать по городам</div>
-    <div class="food-grid">
-      <div class="food-card">
-        <div class="food-city">Пекин</div>
-        <ul>
-          <li>Утка по-пекински (Peking duck) — на Цяньмэнь или в проверенном ресторане, не у первой попавшейся вывески</li>
-          <li>Чжацзянмянь — лапша с соевой пастой</li>
-          <li>Цзянбин — уличный завтрак-блинчик с яйцом и хрустящей начинкой</li>
-          <li>Танхулу — засахаренные ягоды боярышника на палочке</li>
-        </ul>
-      </div>
-      <div class="food-card">
-        <div class="food-city">Шанхай</div>
-        <ul>
-          <li>Сяолунбао — суп-дамплинги, есть аккуратно, бульон внутри горячий</li>
-          <li>Шэнцзянбао — жареные снизу пирожки с бульоном</li>
-          <li>Волосатый краб (大闸蟹) — октябрь-ноябрь как раз сезон, совпадает с датами поездки</li>
-          <li>Лапша с луковым маслом (cong you ban mian)</li>
-        </ul>
-      </div>
-      <div class="food-card">
-        <div class="food-city">Чунцин</div>
-        <ul>
-          <li>Хого (火锅) — Чунцин официально считается родиной этого блюда, острый бульон на говяжьем жире</li>
-          <li>Сяомянь — острая лапша, местный завтрак/обед</li>
-          <li>Чуань-чуань — уличная вариация хого на шпажках</li>
-        </ul>
-      </div>
-      <div class="food-card">
-        <div class="food-city">Гонконг</div>
+      <div class="tp-content" data-tab-content="food" hidden>
         <ul>
           <li>Дим-сам — на завтрак/обед, не вечером (традиционно дневная еда)</li>
           <li>Яичные вафли (gai daan jai) — уличный стрит-фуд</li>
@@ -611,11 +594,24 @@
           <li>Юаньян (yuenyeung) — смесь чая с кофе, местный напиток</li>
         </ul>
       </div>
+      <div class="tp-content" data-tab-content="budget" hidden>
+        <div class="tp-budget-item"><span class="label">Перелёт Чунцин → Гонконг</span><span class="amount">$80—250</span></div>
+        <div class="tp-budget-item"><span class="label">Жильё 22—25 окт</span><span class="amount">уже оплачено</span></div>
+        <div class="tp-budget-item"><span class="label">Билет The Weeknd</span><span class="amount">уже куплен</span></div>
+        <div class="tp-budget-item"><span class="label">Peak Tram, туда-обратно</span><span class="amount">≈HK$88—135</span></div>
+        <div class="tp-budget-item"><span class="label">Еда, приём пищи</span><span class="amount">≈HK$150—300</span></div>
+        <div class="tp-budget-note">Самый дорогой город маршрута из четырёх — закладывай отдельно на последние дни.</div>
+      </div>
+    </div>
+
+    <div class="stack-total">
+      <span>Итого по внутренним перелётам: 2 перелёта + 1 поезд · ~13.5—15ч транзита суммарно</span>
+      <span class="amount">$220—540</span>
     </div>
   </section>
 
   <section class="prep">
-    <div class="section-title"><span class="num">07</span> Подготовка из России — что взять и настроить</div>
+    <div class="section-title"><span class="num">03</span> Подготовка из России — что взять и настроить</div>
     <div class="checklist-group">
       <div class="cl-group-title">Документы и деньги</div>
       <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Загранпаспорт</b><br><span class="d">Носить при себе постоянно — без него не пускают на вокзалы, в отели, на аэропорты и достопримечательности.</span></span></label>
@@ -642,7 +638,7 @@
   </section>
 
   <section class="open">
-    <div class="section-title"><span class="num">08</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
+    <div class="section-title"><span class="num">04</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
 
     <div class="checklist-progress">
       <div class="cp-bar"><div class="cp-fill" id="cpFill"></div></div>
@@ -774,6 +770,38 @@
   });
 
   loadState();
+
+  // City ticket accordions + in-panel tabs (days / booking / food / budget).
+  document.querySelectorAll('.ticket').forEach(ticket => {
+    const panel = ticket.nextElementSibling;
+    if(!panel || !panel.classList.contains('ticket-panel')) return;
+
+    ticket.setAttribute('tabindex', '0');
+    ticket.setAttribute('role', 'button');
+    ticket.setAttribute('aria-expanded', 'false');
+
+    function toggle(){
+      const opening = panel.hasAttribute('hidden');
+      if(opening){ panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
+      ticket.classList.toggle('open', opening);
+      ticket.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    }
+    ticket.addEventListener('click', toggle);
+    ticket.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+
+    panel.querySelectorAll('.tp-tab').forEach(tabBtn => {
+      tabBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        const key = tabBtn.dataset.tab;
+        panel.querySelectorAll('.tp-tab').forEach(b => b.classList.toggle('active', b === tabBtn));
+        panel.querySelectorAll('.tp-content').forEach(c => {
+          if(c.dataset.tabContent === key){ c.removeAttribute('hidden'); } else { c.setAttribute('hidden', ''); }
+        });
+      });
+    });
+  });
 </script>
 
 </body>
