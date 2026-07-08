@@ -6,7 +6,7 @@
 <title>Москва — Пекин — Шанхай — Чунцин — Гонконг</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Oswald:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Oswald:wght@400;500;600;700&family=Anton&display=swap');
 
   :root{
     --bg-void:#0a0a0a;
@@ -86,14 +86,54 @@
     97%{opacity:1;}
   }
 
+  /* ---------- MARATHON-STYLE TRIM: crosshairs / dot cluster / barcode ---------- */
+  .xmark{position:absolute; width:13px; height:13px; pointer-events:none; opacity:.5; z-index:2;}
+  .xmark::before, .xmark::after{content:''; position:absolute; background:var(--jade);}
+  .xmark::before{left:50%; top:0; width:1px; height:100%; transform:translateX(-50%);}
+  .xmark::after{top:50%; left:0; height:1px; width:100%; transform:translateY(-50%);}
+  .xmark.tl{top:8px; left:8px;} .xmark.tr{top:8px; right:8px;}
+  .xmark.bl{bottom:8px; left:8px;} .xmark.br{bottom:8px; right:8px;}
+  .xmark.red::before, .xmark.red::after{background:var(--seal);}
+
+  .dotcluster{display:inline-flex; gap:6px; align-items:center;}
+  .dotcluster i{width:7px; height:7px; border-radius:50%; border:1px solid var(--jade); display:inline-block; font-style:normal;}
+  .dotcluster i.on{background:var(--jade);}
+  .dotcluster i.on.red{background:var(--seal); border-color:var(--seal);}
+
+  .barcode{
+    height:22px; opacity:.55;
+    background-image:repeating-linear-gradient(90deg,
+      var(--porcelain-dim) 0px, var(--porcelain-dim) 2px,
+      transparent 2px, transparent 3px,
+      var(--porcelain-dim) 3px, var(--porcelain-dim) 4px,
+      transparent 4px, transparent 7px,
+      var(--porcelain-dim) 7px, var(--porcelain-dim) 9px,
+      transparent 9px, transparent 10px,
+      var(--porcelain-dim) 10px, var(--porcelain-dim) 13px,
+      transparent 13px, transparent 15px,
+      var(--porcelain-dim) 15px, var(--porcelain-dim) 16px,
+      transparent 16px, transparent 19px);
+  }
+
   .wrap{max-width:980px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
 
   /* ---------- HEADER ---------- */
-  header{padding:64px 0 40px; border-bottom:1px solid var(--line); position:relative;}
+  header{padding:64px 44px 40px 0; border-bottom:1px solid var(--line); position:relative;}
   header::after{
     content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px;
     background:linear-gradient(90deg, var(--gold), transparent 45%, var(--seal) 80%, transparent);
     box-shadow:0 0 8px 1px rgba(225,58,46,.4);
+  }
+  .vtext{
+    position:absolute; top:0; right:0; bottom:0; width:44px;
+    display:flex; align-items:center; justify-content:center;
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-family:'Anton', sans-serif; font-size:13px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--jade); opacity:.55; white-space:nowrap; pointer-events:none;
+  }
+  @media (max-width:640px){
+    header{padding-right:0;}
+    .vtext{display:none;}
   }
   .eyebrow{
     font-size:12px; letter-spacing:.2em; text-transform:uppercase;
@@ -103,18 +143,21 @@
   }
   .eyebrow::before{content:''; width:22px; height:1px; background:var(--jade); box-shadow:0 0 6px var(--jade);}
   h1{
-    display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 16px;
-    font-family:'Oswald', sans-serif; font-weight:700; font-size:clamp(22px,5vw,52px);
-    line-height:1.25; margin:0 0 20px; letter-spacing:-0.01em;
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 22px;
+    font-family:'Anton', 'Oswald', sans-serif; font-weight:400; font-size:clamp(30px,8.2vw,84px);
+    line-height:.98; margin:0 0 22px; letter-spacing:.01em; text-transform:uppercase;
     color:var(--porcelain);
+    text-shadow:
+      2px 0 0 rgba(225,58,46,.6),
+      -2px 0 0 rgba(46,196,201,.55),
+      0 0 34px rgba(225,58,46,.2);
   }
-  .h1-city{display:inline-flex; align-items:baseline; gap:9px; white-space:nowrap; text-transform:uppercase;}
+  .h1-city{display:inline-flex; align-items:baseline; gap:14px; white-space:nowrap; text-transform:uppercase;}
   .h1-cn{
-    font-family:'IBM Plex Mono', monospace; font-size:1em; letter-spacing:.03em;
-    text-transform:none; color:var(--jade); opacity:1;
+    font-family:'Anton', 'Oswald', sans-serif; font-weight:400; font-size:1em; letter-spacing:.01em;
+    text-transform:none; color:var(--jade); opacity:1; text-shadow:none;
   }
-  .h1-cn::after{content:' //'; opacity:.7;}
-  h1 .arrow{color:var(--seal); font-weight:400; font-size:.9em; text-shadow:0 0 10px var(--seal);}
+  h1 .arrow{color:var(--seal); font-weight:400; font-size:.72em; text-shadow:0 0 10px var(--seal);}
   .sub{color:var(--porcelain-dim); font-size:14px; max-width:560px;}
   .datebar{
     margin-top:28px; display:flex; gap:0; flex-wrap:wrap; border:1px solid var(--line);
@@ -128,8 +171,16 @@
   /* ---------- MAP ---------- */
   section.map{padding:56px 0; border-bottom:1px solid var(--line);}
   .section-title{
+    position:relative;
     font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--porcelain-dim);
     margin-bottom:24px; display:flex; align-items:center; gap:8px 10px; flex-wrap:wrap;
+  }
+  .section-title::before{
+    content:attr(data-num);
+    position:absolute; left:-4px; top:50%; transform:translateY(-58%);
+    font-family:'Anton', sans-serif; font-size:76px; line-height:1;
+    color:transparent; -webkit-text-stroke:1px rgba(46,196,201,.16);
+    z-index:-1; pointer-events:none; white-space:nowrap;
   }
   .section-title span.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:16px; letter-spacing:.04em; text-shadow:0 0 10px rgba(225,58,46,.5);}
   svg#routemap{width:100%; height:auto; overflow:visible;}
@@ -238,8 +289,24 @@
     padding:20px 22px 26px; margin:-4px 0 22px; animation:panelIn .18s ease;
   }
   @keyframes panelIn{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
-  .tp-poster{margin:-4px 0 20px; border:1px solid var(--line);}
-  .tp-poster img{display:block; width:100%; height:auto; max-height:420px; object-fit:cover; object-position:center 20%;}
+  .tp-poster{margin:-4px 0 20px; border:1px solid var(--line); position:relative;}
+  .tp-poster-img{position:relative; overflow:hidden;}
+  .tp-poster-img img{
+    display:block; width:100%; height:auto; max-height:420px; object-fit:cover; object-position:center 20%;
+    filter:grayscale(1) contrast(1.2) brightness(.85);
+  }
+  .tp-poster-img::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(155deg, rgba(225,58,46,.6), rgba(46,196,201,.55));
+    mix-blend-mode:color;
+  }
+  .tp-poster-img::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background-image:radial-gradient(circle, rgba(10,10,10,.95) 1px, transparent 1.3px);
+    background-size:4px 4px;
+    mix-blend-mode:multiply;
+    opacity:.4;
+  }
   .tp-poster-cap{
     display:flex; align-items:center; justify-content:space-between; gap:10px 16px; flex-wrap:wrap;
     padding:10px 14px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.08em;
@@ -357,15 +424,18 @@
 <div class="wrap">
 
   <header>
+    <span class="xmark bl red"></span>
+    <div class="vtext">CHINA ROUTE · 中国行 · 2026</div>
     <div class="eyebrow-row">
       <div class="eyebrow">Предварительный маршрут · черновик</div>
+      <span class="dotcluster"><i></i><i class="on"></i><i class="on red"></i><i></i></span>
       <div class="term-tag">DRAFT_V0.9 · 草稿</div>
     </div>
     <h1>
-      <span class="h1-city">Beijing<span class="h1-cn">北京</span></span><span class="arrow">→</span>
-      <span class="h1-city">Shanghai<span class="h1-cn">上海</span></span><span class="arrow">→</span>
-      <span class="h1-city">Chongqing<span class="h1-cn">重庆</span></span><span class="arrow">→</span>
-      <span class="h1-city">Hong Kong<span class="h1-cn">香港</span></span>
+      <span class="h1-city">Beijing <span class="h1-cn">// 北京</span></span><span class="arrow">→</span>
+      <span class="h1-city">Shanghai <span class="h1-cn">// 上海</span></span><span class="arrow">→</span>
+      <span class="h1-city">Chongqing <span class="h1-cn">// 重庆</span></span><span class="arrow">→</span>
+      <span class="h1-city">Hong Kong <span class="h1-cn">// 香港</span></span>
     </h1>
     <p class="sub">17 дней, отсчёт от вылета из Москвы до возврата. Якорь маршрута — концерт The Weeknd в Гонконге, 24 октября. Всё остальное выстроено вокруг этой даты.</p>
     <div class="datebar">
@@ -377,7 +447,7 @@
   </header>
 
   <section class="map">
-    <div class="section-title"><span class="num">01</span> Схема маршрута <span style="opacity:.5">— не географическая карта, порядок и направление важнее масштаба</span></div>
+    <div class="section-title" data-num="01"><span class="num">01</span> Схема маршрута <span style="opacity:.5">— не географическая карта, порядок и направление важнее масштаба</span></div>
     <svg id="routemap" viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="neonGlow" x="-200%" y="-200%" width="500%" height="500%">
@@ -431,11 +501,12 @@
   </section>
 
   <section class="stack">
-    <div class="section-title"><span class="num">02</span> Раскладка по городам <span class="term-tag" style="margin-left:auto;">TRANSIT.LOG · 过境记录</span></div>
+    <div class="section-title" data-num="02"><span class="num">02</span> Раскладка по городам <span class="term-tag" style="margin-left:auto;">TRANSIT.LOG · 过境记录</span></div>
     <p class="sub" style="margin:-14px 0 22px;">Нажми на карточку города — раскроются день за днём, брони, еда и бюджет.</p>
 
     <!-- BEIJING -->
     <div class="ticket">
+      <span class="xmark tr"></span>
       <div class="t-day">
         <div><div class="count">5<sup>дн</sup></div><div class="range">10—14 окт</div></div>
         <div class="range">заезд вечер 9→10</div>
@@ -492,6 +563,7 @@
 
     <!-- SHANGHAI -->
     <div class="ticket">
+      <span class="xmark tr"></span>
       <div class="t-day">
         <div><div class="count">4<sup>дн</sup></div><div class="range">15—18 окт</div></div>
         <div class="range">заезд днём 15-го</div>
@@ -548,6 +620,7 @@
 
     <!-- CHONGQING -->
     <div class="ticket">
+      <span class="xmark tr"></span>
       <div class="t-day">
         <div><div class="count">2<sup>дн</sup></div><div class="range">20—21 окт</div></div>
         <div class="range">+ вечер 19-го</div>
@@ -604,6 +677,7 @@
 
     <!-- HONG KONG -->
     <div class="ticket">
+      <span class="xmark tr"></span>
       <div class="t-day">
         <div><div class="count">4<sup>дн</sup></div><div class="range">22—25 окт</div></div>
         <div class="range">бронь жилья 22—25</div>
@@ -622,7 +696,10 @@
     </div>
     <div class="ticket-panel" id="panel-hongkong" hidden>
       <div class="tp-poster">
-        <img src="weeknd-poster.jpg" alt="The Weeknd — After Hours Till Dawn, Hong Kong, Kai Tak Stadium">
+        <span class="xmark tl red"></span>
+        <div class="tp-poster-img">
+          <img src="weeknd-poster.jpg" alt="The Weeknd — After Hours Till Dawn, Hong Kong, Kai Tak Stadium">
+        </div>
         <div class="tp-poster-cap">THE WEEKND · KAI TAK STADIUM · 24 ОКТ <span class="term-tag" style="display:inline;">CONFIRMED · 已确认</span></div>
       </div>
       <div class="tp-tabs">
@@ -664,7 +741,7 @@
   </section>
 
   <section class="prep">
-    <div class="section-title"><span class="num">03</span> Подготовка из России — что взять и настроить</div>
+    <div class="section-title" data-num="03"><span class="num">03</span> Подготовка из России — что взять и настроить</div>
     <div class="checklist-group">
       <div class="cl-group-title">Документы и деньги</div>
       <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Загранпаспорт</b><br><span class="d">Носить при себе постоянно — без него не пускают на вокзалы, в отели, на аэропорты и достопримечательности.</span></span></label>
@@ -691,7 +768,7 @@
   </section>
 
   <section class="open">
-    <div class="section-title"><span class="num">04</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
+    <div class="section-title" data-num="04"><span class="num">04</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
 
     <div class="checklist-progress">
       <div class="cp-bar"><div class="cp-fill" id="cpFill"></div></div>
@@ -750,6 +827,8 @@
   <footer>
     Черновик маршрута · составлено на основе разговора · цифры перелётов ориентировочные, проверить на датах бронирования
     <div class="term-tag footer-term">END OF FILE · 文件结束</div>
+    <div class="barcode" style="max-width:220px; margin:16px auto 0;"></div>
+    <div style="margin-top:12px; display:flex; justify-content:center;"><span class="dotcluster"><i class="on red"></i><i></i><i class="on"></i><i class="on"></i><i></i></span></div>
   </footer>
 
 </div>
