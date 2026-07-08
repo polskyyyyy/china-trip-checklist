@@ -370,13 +370,20 @@
   .cp-label{font-size:11px; color:var(--porcelain-dim); white-space:nowrap;}
   .cp-label span{color:var(--gold); font-family:'Oswald', sans-serif; font-size:14px; text-shadow:0 0 10px rgba(225,58,46,.5);}
 
-  /* section-level accordion (used for Prep / Checklist) — same interaction as the city tickets */
-  .section-toggle{
-    display:flex; align-items:center; gap:7px; margin-bottom:24px; cursor:pointer;
-    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--jade); opacity:.85;
+  /* section-level accordion (used for Prep / Checklist) — whole header is one
+     clickable tile, same visual weight as a city ticket card */
+  .section-tile{
+    position:relative;
+    padding:22px 26px 20px;
+    background:rgba(20,20,20,.55);
+    cursor:pointer;
+    transition:background .2s ease;
   }
-  .section-toggle.open .chev{transform:rotate(180deg);}
+  .section-tile:hover{background:rgba(30,30,30,.7);}
+  .section-tile .section-title{margin-bottom:20px;}
+  .section-tile .section-progress{margin-bottom:0;}
+  .section-tile .t-expand{margin-top:16px;}
+  .section-tile.open .chev{transform:rotate(180deg);}
   .section-panel{
     background:rgba(22,22,22,.55);
     padding:22px 22px 8px; animation:panelIn .18s ease;
@@ -763,12 +770,15 @@
   <div class="section-divider"></div>
 
   <section class="prep">
-    <div class="section-title" data-num="03"><span class="num">03</span> Подготовка из России — что взять и настроить</div>
-    <div class="section-progress">
-      <div class="cp-bar"><div class="cp-fill"></div></div>
-      <div class="cp-label"><span class="cp-done">0</span> / <span class="cp-total">0</span> закрыто</div>
+    <div class="section-tile">
+      <span class="xmark tr red"></span>
+      <div class="section-title" data-num="03"><span class="num">03</span> Подготовка из России — что взять и настроить</div>
+      <div class="section-progress">
+        <div class="cp-bar"><div class="cp-fill"></div></div>
+        <div class="cp-label"><span class="cp-done">0</span> / <span class="cp-total">0</span> закрыто</div>
+      </div>
+      <div class="t-expand"><span class="chev">▾</span> Показать / скрыть пункты</div>
     </div>
-    <div class="section-toggle"><span class="chev">▾</span> Показать / скрыть пункты</div>
     <div class="section-panel" hidden>
       <div class="checklist-group">
         <div class="cl-group-title">Документы и деньги</div>
@@ -799,13 +809,15 @@
   <div class="section-divider"></div>
 
   <section class="open">
-    <div class="section-title" data-num="04"><span class="num">04</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
-
-    <div class="section-progress">
-      <div class="cp-bar"><div class="cp-fill"></div></div>
-      <div class="cp-label"><span class="cp-done">0</span> / <span class="cp-total">0</span> закрыто</div>
+    <div class="section-tile">
+      <span class="xmark tr red"></span>
+      <div class="section-title" data-num="04"><span class="num">04</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
+      <div class="section-progress">
+        <div class="cp-bar"><div class="cp-fill"></div></div>
+        <div class="cp-label"><span class="cp-done">0</span> / <span class="cp-total">0</span> закрыто</div>
+      </div>
+      <div class="t-expand"><span class="chev">▾</span> Показать / скрыть пункты</div>
     </div>
-    <div class="section-toggle"><span class="chev">▾</span> Показать / скрыть пункты</div>
     <div class="section-panel" hidden>
       <div class="checklist-group">
         <div class="cl-group-title">Сделано</div>
@@ -993,7 +1005,7 @@
 
   // ---- Section accordions (Prep / Checklist) ----
   try{
-    document.querySelectorAll('.section-toggle').forEach(toggle => {
+    document.querySelectorAll('.section-tile').forEach(toggle => {
       const panel = toggle.nextElementSibling;
       if(!panel || !panel.classList.contains('section-panel')) return;
 
