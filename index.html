@@ -166,7 +166,7 @@
       -2px 0 0 rgba(46,196,201,.55),
       0 0 34px rgba(225,58,46,.2);
   }
-  h1 .arrow{color:var(--seal); font-weight:400; font-size:1em; text-shadow:0 0 10px var(--seal);}
+  h1 .arrow{color:var(--seal); font-weight:900; font-size:1em; text-shadow:0 0 10px var(--seal); justify-self:center;}
   .sub{color:var(--porcelain-dim); font-size:14px; max-width:560px;}
   .datebar{
     position:relative;
@@ -176,8 +176,14 @@
   .datebar .k{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--porcelain-dim); margin-bottom:6px;}
   .datebar .v{font-family:'Oswald', sans-serif; font-size:20px; color:var(--gold); text-shadow:0 0 10px rgba(225,58,46,.55);}
 
+  .section-divider{
+    height:1px; margin:0; border:none;
+    background:linear-gradient(90deg, var(--gold), transparent 45%, var(--seal) 80%, transparent);
+    box-shadow:0 0 8px 1px rgba(225,58,46,.4);
+  }
+
   /* ---------- MAP ---------- */
-  section.map{padding:56px 0; border-bottom:1px solid var(--line);}
+  section.map{padding:56px 0;}
   .section-title{
     position:relative;
     font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--porcelain-dim);
@@ -355,14 +361,26 @@
   section.open{padding:0 0 72px;}
 
   /* ---------- PREP ---------- */
-  section.prep{padding:56px 0; border-top:1px solid var(--line);}
+  section.prep{padding:56px 0;}
 
   /* ---------- CHECKLIST ---------- */
-  .checklist-progress{display:flex; align-items:center; gap:16px; margin-bottom:28px;}
+  .checklist-progress, .section-progress{display:flex; align-items:center; gap:16px; margin-bottom:20px;}
   .cp-bar{flex:1; height:3px; background:var(--line); position:relative; overflow:hidden;}
   .cp-fill{position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--jade); transition:width .4s ease; box-shadow:0 0 10px var(--jade);}
   .cp-label{font-size:11px; color:var(--porcelain-dim); white-space:nowrap;}
   .cp-label span{color:var(--gold); font-family:'Oswald', sans-serif; font-size:14px; text-shadow:0 0 10px rgba(225,58,46,.5);}
+
+  /* section-level accordion (used for Prep / Checklist) — same interaction as the city tickets */
+  .section-toggle{
+    display:flex; align-items:center; gap:7px; margin-bottom:24px; cursor:pointer;
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--jade); opacity:.85;
+  }
+  .section-toggle.open .chev{transform:rotate(180deg);}
+  .section-panel{
+    background:rgba(22,22,22,.55);
+    padding:22px 22px 8px; animation:panelIn .18s ease;
+  }
 
   .checklist-group{margin-bottom:30px;}
   .cl-group-title{
@@ -496,6 +514,8 @@
     <p class="map-caption">Единственный участок с полноценным международным контролем на выходе — <em>Чунцин → Гонконг</em>: переход из материкового Китая в САР технически приравнен к пересечению границы.</p>
     <div class="term-tag" style="margin-top:8px;">BORDER_CHECK · 边境管制</div>
   </section>
+
+  <div class="section-divider"></div>
 
   <section class="stack">
     <div class="section-title" data-num="02"><span class="num">02</span> Раскладка по городам <span class="term-tag" style="margin-left:auto;">TRANSIT.LOG · 过境记录</span></div>
@@ -740,87 +760,100 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
   <section class="prep">
     <div class="section-title" data-num="03"><span class="num">03</span> Подготовка из России — что взять и настроить</div>
-    <div class="checklist-group">
-      <div class="cl-group-title">Документы и деньги</div>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Загранпаспорт</b><br><span class="d">Носить при себе постоянно — без него не пускают на вокзалы, в отели, на аэропорты и достопримечательности.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Электронные + распечатанные билеты, страховка</b></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Копии документов</b><br><span class="d">Бумажные + фото на телефоне + отправить себе на почту.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Наличные юани</b><br><span class="d">Купить заранее в России. Лимит ввоза — эквивалент $5000 (или 20 000 юаней) без декларирования.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Российская карта Union Pay (если есть)</b><br><span class="d">Работают Россельхозбанк и Азиатско-Тихоокеанский банк. К Alipay такую карту привязать нельзя — оформлять карту специально под поездку не имеет смысла.</span></span></label>
+    <div class="section-progress">
+      <div class="cp-bar"><div class="cp-fill"></div></div>
+      <div class="cp-label"><span class="cp-done">0</span> / <span class="cp-total">0</span> закрыто</div>
     </div>
-    <div class="checklist-group">
-      <div class="cl-group-title">Приложения и связь</div>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>VPN — купить и установить ЗАРАНЕЕ</b><br><span class="d">LetsVPN / Surfshark / Astrill. В самом Китае сайты VPN-провайдеров тоже могут быть недоступны.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Alipay — установить и верифицировать</b><br><span class="d">Регистрация по росс. номеру → Я → Персональные данные → загрузить паспорт и фото → дождаться статуса «проверено». Пополнение счёта — перевод через Сбер/ВТБ/Тинькофф на A-wallet по номеру +86, первое пополнение — небольшой суммой 200-300 юаней (иначе может не пройти проверку безопасности).</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>WeChat</b><br><span class="d">Установить, для связи и части платежей.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Amap (карты)</b><br><span class="d">Google Maps в Китае работает плохо и не знает многих мест. В настройках Amap есть английский язык.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>eSIM или роуминг</b><br><span class="d">Например, через сервис Yesim — оформить заранее. Альтернатива — сим-карта China Unicom в аэропорту по прилёту (~150 CNY / 15 дней / 40 Гб).</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Arrival card</b><br><span class="d">Можно заполнить заранее в самолёте или по прилёту по ссылке s.nia.gov.cn/ArrivalCardFillingPhone.</span></span></label>
-    </div>
-    <div class="checklist-group">
-      <div class="cl-group-title">Вещи</div>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Пауэрбанк с сертификацией 3C (CCC)</b><br><span class="d">Критично лично для тебя — у тебя 2 внутренних перелёта (Шанхай→Чунцин, Чунцин→Гонконг). На участке Пекин→Шанхай теперь поезд — там это ограничение не действует. Без маркировки CCC на рейсах устройство с высокой вероятностью изымут в аэропорту при пересадке.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Переходник под розетку</b><br><span class="d">Китайский стандарт — плоские вертикальные штыри (Type A), 220V/50Гц. В части отелей и залов ожидания уже есть и европейские розетки/USB/Type-C, но переходник нужен обязательно.</span></span></label>
-      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Личная аптечка</b><br><span class="d">От головы, от расстройства желудка, от простуды — привычные тебе препараты.</span></span></label>
+    <div class="section-toggle"><span class="chev">▾</span> Показать / скрыть пункты</div>
+    <div class="section-panel" hidden>
+      <div class="checklist-group">
+        <div class="cl-group-title">Документы и деньги</div>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Загранпаспорт</b><br><span class="d">Носить при себе постоянно — без него не пускают на вокзалы, в отели, на аэропорты и достопримечательности.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Электронные + распечатанные билеты, страховка</b></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Копии документов</b><br><span class="d">Бумажные + фото на телефоне + отправить себе на почту.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Наличные юани</b><br><span class="d">Купить заранее в России. Лимит ввоза — эквивалент $5000 (или 20 000 юаней) без декларирования.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Российская карта Union Pay (если есть)</b><br><span class="d">Работают Россельхозбанк и Азиатско-Тихоокеанский банк. К Alipay такую карту привязать нельзя — оформлять карту специально под поездку не имеет смысла.</span></span></label>
+      </div>
+      <div class="checklist-group">
+        <div class="cl-group-title">Приложения и связь</div>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>VPN — купить и установить ЗАРАНЕЕ</b><br><span class="d">LetsVPN / Surfshark / Astrill. В самом Китае сайты VPN-провайдеров тоже могут быть недоступны.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Alipay — установить и верифицировать</b><br><span class="d">Регистрация по росс. номеру → Я → Персональные данные → загрузить паспорт и фото → дождаться статуса «проверено». Пополнение счёта — перевод через Сбер/ВТБ/Тинькофф на A-wallet по номеру +86, первое пополнение — небольшой суммой 200-300 юаней (иначе может не пройти проверку безопасности).</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>WeChat</b><br><span class="d">Установить, для связи и части платежей.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Amap (карты)</b><br><span class="d">Google Maps в Китае работает плохо и не знает многих мест. В настройках Amap есть английский язык.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>eSIM или роуминг</b><br><span class="d">Например, через сервис Yesim — оформить заранее. Альтернатива — сим-карта China Unicom в аэропорту по прилёту (~150 CNY / 15 дней / 40 Гб).</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Arrival card</b><br><span class="d">Можно заполнить заранее в самолёте или по прилёту по ссылке s.nia.gov.cn/ArrivalCardFillingPhone.</span></span></label>
+      </div>
+      <div class="checklist-group">
+        <div class="cl-group-title">Вещи</div>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Пауэрбанк с сертификацией 3C (CCC)</b><br><span class="d">Критично лично для тебя — у тебя 2 внутренних перелёта (Шанхай→Чунцин, Чунцин→Гонконг). На участке Пекин→Шанхай теперь поезд — там это ограничение не действует. Без маркировки CCC на рейсах устройство с высокой вероятностью изымут в аэропорту при пересадке.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Переходник под розетку</b><br><span class="d">Китайский стандарт — плоские вертикальные штыри (Type A), 220V/50Гц. В части отелей и залов ожидания уже есть и европейские розетки/USB/Type-C, но переходник нужен обязательно.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Личная аптечка</b><br><span class="d">От головы, от расстройства желудка, от простуды — привычные тебе препараты.</span></span></label>
+      </div>
     </div>
   </section>
+
+  <div class="section-divider"></div>
 
   <section class="open">
     <div class="section-title" data-num="04"><span class="num">04</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
 
-    <div class="checklist-progress">
-      <div class="cp-bar"><div class="cp-fill" id="cpFill"></div></div>
-      <div class="cp-label"><span id="cpDone">0</span> / <span id="cpTotal">0</span> закрыто</div>
+    <div class="section-progress">
+      <div class="cp-bar"><div class="cp-fill"></div></div>
+      <div class="cp-label"><span class="cp-done">0</span> / <span class="cp-total">0</span> закрыто</div>
     </div>
+    <div class="section-toggle"><span class="chev">▾</span> Показать / скрыть пункты</div>
+    <div class="section-panel" hidden>
+      <div class="checklist-group">
+        <div class="cl-group-title">Сделано</div>
+        <label class="cl-item done">
+          <input type="checkbox" checked>
+          <span class="box"></span>
+          <span class="txt"><b>Аренда жилья в Гонконге</b><br><span class="d">22—25 октября, бронь подтверждена.</span></span>
+        </label>
+        <label class="cl-item done">
+          <input type="checkbox" checked>
+          <span class="box"></span>
+          <span class="txt"><b>Билет на концерт The Weeknd</b><br><span class="d">Куплен/забронирован. <span class="flag warn" style="margin-left:4px;">проверить отдельно: пройден ли physical pickup через HK Ticketing hotline, если схема требует получения билета на месте</span></span></span>
+        </label>
+      </div>
 
-    <div class="checklist-group">
-      <div class="cl-group-title">Сделано</div>
-      <label class="cl-item done">
-        <input type="checkbox" checked>
-        <span class="box"></span>
-        <span class="txt"><b>Аренда жилья в Гонконге</b><br><span class="d">22—25 октября, бронь подтверждена.</span></span>
-      </label>
-      <label class="cl-item done">
-        <input type="checkbox" checked>
-        <span class="box"></span>
-        <span class="txt"><b>Билет на концерт The Weeknd</b><br><span class="d">Куплен/забронирован. <span class="flag warn" style="margin-left:4px;">проверить отдельно: пройден ли physical pickup через HK Ticketing hotline, если схема требует получения билета на месте</span></span></span>
-      </label>
-    </div>
-
-    <div class="checklist-group">
-      <div class="cl-group-title">Не закрыто</div>
-      <label class="cl-item">
-        <input type="checkbox">
-        <span class="box"></span>
-        <span class="txt"><b>Билеты Москва ⇄ Китай</b><br><span class="d">Дата вылета (9 окт) зависит от решения друга об участии в поездке — переменная вне твоего контроля, пока не зафиксирована.</span></span>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox">
-        <span class="box"></span>
-        <span class="txt"><b>Поезд Пекин → Шанхай (дневной G)</b><br><span class="d">Не забронирован. Билеты на 12306/Trip.com открываются за 15 дней до даты — бронировать сразу, как только откроется продажа.</span></span>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox">
-        <span class="box"></span>
-        <span class="txt"><b>Перелёт Шанхай → Чунцин</b><br><span class="d">Не забронирован.</span></span>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox">
-        <span class="box"></span>
-        <span class="txt"><b>Перелёт Чунцин → Гонконг</b><br><span class="d">Не забронирован. Учесть погранконтроль как на международном рейсе — регистрация заранее.</span></span>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox">
-        <span class="box"></span>
-        <span class="txt"><b>Виза / въезд в материковый Китай</b><br><span class="d">Требования для гражданина РФ не проверены в этом разговоре — отдельная задача, не подразумевай автоматически безвизовый режим.</span></span>
-      </label>
-      <label class="cl-item">
-        <input type="checkbox">
-        <span class="box"></span>
-        <span class="txt"><b>Разговор с врачом про плотный пеший туризм</b><br><span class="d">Ты решил не поднимать эту тему повторно — фиксирую как открытый пункт, а не как решённый вопрос, раз явного ответа врача на этот конкретный сценарий не было.</span></span>
-      </label>
+      <div class="checklist-group">
+        <div class="cl-group-title">Не закрыто</div>
+        <label class="cl-item">
+          <input type="checkbox">
+          <span class="box"></span>
+          <span class="txt"><b>Билеты Москва ⇄ Китай</b><br><span class="d">Дата вылета (9 окт) зависит от решения друга об участии в поездке — переменная вне твоего контроля, пока не зафиксирована.</span></span>
+        </label>
+        <label class="cl-item">
+          <input type="checkbox">
+          <span class="box"></span>
+          <span class="txt"><b>Поезд Пекин → Шанхай (дневной G)</b><br><span class="d">Не забронирован. Билеты на 12306/Trip.com открываются за 15 дней до даты — бронировать сразу, как только откроется продажа.</span></span>
+        </label>
+        <label class="cl-item">
+          <input type="checkbox">
+          <span class="box"></span>
+          <span class="txt"><b>Перелёт Шанхай → Чунцин</b><br><span class="d">Не забронирован.</span></span>
+        </label>
+        <label class="cl-item">
+          <input type="checkbox">
+          <span class="box"></span>
+          <span class="txt"><b>Перелёт Чунцин → Гонконг</b><br><span class="d">Не забронирован. Учесть погранконтроль как на международном рейсе — регистрация заранее.</span></span>
+        </label>
+        <label class="cl-item">
+          <input type="checkbox">
+          <span class="box"></span>
+          <span class="txt"><b>Виза / въезд в материковый Китай</b><br><span class="d">Требования для гражданина РФ не проверены в этом разговоре — отдельная задача, не подразумевай автоматически безвизовый режим.</span></span>
+        </label>
+        <label class="cl-item">
+          <input type="checkbox">
+          <span class="box"></span>
+          <span class="txt"><b>Разговор с врачом про плотный пеший туризм</b><br><span class="d">Ты решил не поднимать эту тему повторно — фиксирую как открытый пункт, а не как решённый вопрос, раз явного ответа врача на этот конкретный сценарий не было.</span></span>
+        </label>
+      </div>
     </div>
   </section>
 
@@ -861,15 +894,22 @@
       if(item) item.classList.toggle('done', cb.checked);
     };
 
+    // Each .section-progress bar tracks only the checkboxes inside its own
+    // <section> (Prep and Checklist each get their own independent count).
     const updateProgress = () => {
-      const total = boxes.length;
-      const done = boxes.filter(cb => cb.checked).length;
-      const elTotal = document.getElementById('cpTotal');
-      const elDone = document.getElementById('cpDone');
-      const elFill = document.getElementById('cpFill');
-      if(elTotal) elTotal.textContent = total;
-      if(elDone) elDone.textContent = done;
-      if(elFill) elFill.style.width = (total ? (done/total*100) : 0) + '%';
+      document.querySelectorAll('.section-progress').forEach(bar => {
+        const section = bar.closest('section');
+        if(!section) return;
+        const sectionBoxes = section.querySelectorAll('.cl-item input[type="checkbox"]');
+        const total = sectionBoxes.length;
+        const done = Array.from(sectionBoxes).filter(cb => cb.checked).length;
+        const fill = bar.querySelector('.cp-fill');
+        const doneEl = bar.querySelector('.cp-done');
+        const totalEl = bar.querySelector('.cp-total');
+        if(fill) fill.style.width = (total ? (done/total*100) : 0) + '%';
+        if(doneEl) doneEl.textContent = done;
+        if(totalEl) totalEl.textContent = total;
+      });
     };
 
     const saveState = cb => {
@@ -950,6 +990,29 @@
       });
     });
   }catch(e){ console.error('Ticket accordion wiring failed:', e); }
+
+  // ---- Section accordions (Prep / Checklist) ----
+  try{
+    document.querySelectorAll('.section-toggle').forEach(toggle => {
+      const panel = toggle.nextElementSibling;
+      if(!panel || !panel.classList.contains('section-panel')) return;
+
+      toggle.setAttribute('tabindex', '0');
+      toggle.setAttribute('role', 'button');
+      toggle.setAttribute('aria-expanded', 'false');
+
+      const doToggle = () => {
+        const opening = panel.hasAttribute('hidden');
+        if(opening){ panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
+        toggle.classList.toggle('open', opening);
+        toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      };
+      toggle.addEventListener('click', doToggle);
+      toggle.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); doToggle(); }
+      });
+    });
+  }catch(e){ console.error('Section accordion wiring failed:', e); }
 </script>
 
 </body>
