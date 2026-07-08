@@ -702,106 +702,122 @@
 </div>
 
 <script>
-  // Telegram Mini App bootstrap — no-ops gracefully when opened outside Telegram.
-  const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-  if(tg){
-    tg.ready();
-    tg.expand();
-    try{ tg.setHeaderColor('#0a0a0a'); }catch(e){}
-    try{ tg.setBackgroundColor('#0a0a0a'); }catch(e){}
-    try{ tg.disableVerticalSwipes && tg.disableVerticalSwipes(); }catch(e){}
-  }
+  // Each block below is isolated in its own try/catch so a failure in one
+  // (e.g. Telegram SDK behaving unexpectedly outside Telegram) can never
+  // block the others from wiring up.
 
-  // Stable per-item key based on DOM order, used both for Telegram CloudStorage
-  // (synced to the user's account, works across every device) and the
-  // localStorage fallback when the page is opened as a plain browser tab.
-  const boxes = Array.from(document.querySelectorAll('.cl-item input[type="checkbox"]'));
-  boxes.forEach((cb, i) => { cb.dataset.key = 'chk_' + i; });
-
-  function syncDoneClass(cb){
-    const item = cb.closest('.cl-item');
-    if(item) item.classList.toggle('done', cb.checked);
-  }
-
-  function updateProgress(){
-    const total = boxes.length;
-    const done = boxes.filter(cb => cb.checked).length;
-    document.getElementById('cpTotal').textContent = total;
-    document.getElementById('cpDone').textContent = done;
-    document.getElementById('cpFill').style.width = (total ? (done/total*100) : 0) + '%';
-  }
-
-  function saveState(cb){
-    const val = cb.checked ? '1' : '0';
-    if(tg && tg.CloudStorage){
-      tg.CloudStorage.setItem(cb.dataset.key, val, () => {});
-    }else{
-      try{ localStorage.setItem(cb.dataset.key, val); }catch(e){}
+  // ---- Telegram Mini App bootstrap ----
+  let tg = null;
+  try{
+    tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if(tg){
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor && tg.setHeaderColor('#0a0a0a');
+      tg.setBackgroundColor && tg.setBackgroundColor('#0a0a0a');
+      tg.disableVerticalSwipes && tg.disableVerticalSwipes();
     }
-  }
+  }catch(e){ console.error('Telegram bootstrap failed:', e); tg = null; }
 
-  function applyStates(values){
-    boxes.forEach(cb => {
-      const v = values[cb.dataset.key];
-      if(v === '1') cb.checked = true;
-      else if(v === '0') cb.checked = false;
-      syncDoneClass(cb);
-    });
-    updateProgress();
-  }
+  // ---- Checklist persistence (Telegram CloudStorage, falls back to localStorage) ----
+  try{
+    const boxes = Array.from(document.querySelectorAll('.cl-item input[type="checkbox"]'));
+    boxes.forEach((cb, i) => { cb.dataset.key = 'chk_' + i; });
 
-  function loadState(){
-    const keys = boxes.map(cb => cb.dataset.key);
-    if(tg && tg.CloudStorage){
-      tg.CloudStorage.getItems(keys, (err, values) => applyStates(err || !values ? {} : values));
-    }else{
-      const values = {};
-      keys.forEach(k => { try{ values[k] = localStorage.getItem(k); }catch(e){} });
-      applyStates(values);
-    }
-  }
+    const syncDoneClass = cb => {
+      const item = cb.closest('.cl-item');
+      if(item) item.classList.toggle('done', cb.checked);
+    };
 
-  boxes.forEach(cb => {
-    cb.addEventListener('change', () => {
-      syncDoneClass(cb);
+    const updateProgress = () => {
+      const total = boxes.length;
+      const done = boxes.filter(cb => cb.checked).length;
+      const elTotal = document.getElementById('cpTotal');
+      const elDone = document.getElementById('cpDone');
+      const elFill = document.getElementById('cpFill');
+      if(elTotal) elTotal.textContent = total;
+      if(elDone) elDone.textContent = done;
+      if(elFill) elFill.style.width = (total ? (done/total*100) : 0) + '%';
+    };
+
+    const saveState = cb => {
+      const val = cb.checked ? '1' : '0';
+      try{
+        if(tg && tg.CloudStorage){
+          tg.CloudStorage.setItem(cb.dataset.key, val, () => {});
+        }else{
+          localStorage.setItem(cb.dataset.key, val);
+        }
+      }catch(e){ console.error('saveState failed:', e); }
+    };
+
+    const applyStates = values => {
+      boxes.forEach(cb => {
+        const v = values[cb.dataset.key];
+        if(v === '1') cb.checked = true;
+        else if(v === '0') cb.checked = false;
+        syncDoneClass(cb);
+      });
       updateProgress();
-      saveState(cb);
-    });
-  });
+    };
 
-  loadState();
+    const loadState = () => {
+      const keys = boxes.map(cb => cb.dataset.key);
+      try{
+        if(tg && tg.CloudStorage){
+          tg.CloudStorage.getItems(keys, (err, values) => applyStates(err || !values ? {} : values));
+        }else{
+          const values = {};
+          keys.forEach(k => { values[k] = localStorage.getItem(k); });
+          applyStates(values);
+        }
+      }catch(e){ console.error('loadState failed:', e); applyStates({}); }
+    };
 
-  // City ticket accordions + in-panel tabs (days / booking / food / budget).
-  document.querySelectorAll('.ticket').forEach(ticket => {
-    const panel = ticket.nextElementSibling;
-    if(!panel || !panel.classList.contains('ticket-panel')) return;
-
-    ticket.setAttribute('tabindex', '0');
-    ticket.setAttribute('role', 'button');
-    ticket.setAttribute('aria-expanded', 'false');
-
-    function toggle(){
-      const opening = panel.hasAttribute('hidden');
-      if(opening){ panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
-      ticket.classList.toggle('open', opening);
-      ticket.setAttribute('aria-expanded', opening ? 'true' : 'false');
-    }
-    ticket.addEventListener('click', toggle);
-    ticket.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    boxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        syncDoneClass(cb);
+        updateProgress();
+        saveState(cb);
+      });
     });
 
-    panel.querySelectorAll('.tp-tab').forEach(tabBtn => {
-      tabBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        const key = tabBtn.dataset.tab;
-        panel.querySelectorAll('.tp-tab').forEach(b => b.classList.toggle('active', b === tabBtn));
-        panel.querySelectorAll('.tp-content').forEach(c => {
-          if(c.dataset.tabContent === key){ c.removeAttribute('hidden'); } else { c.setAttribute('hidden', ''); }
+    loadState();
+  }catch(e){ console.error('Checklist wiring failed:', e); }
+
+  // ---- City ticket accordions + in-panel tabs (days / booking / food / budget) ----
+  try{
+    document.querySelectorAll('.ticket').forEach(ticket => {
+      const panel = ticket.nextElementSibling;
+      if(!panel || !panel.classList.contains('ticket-panel')) return;
+
+      ticket.setAttribute('tabindex', '0');
+      ticket.setAttribute('role', 'button');
+      ticket.setAttribute('aria-expanded', 'false');
+
+      const toggle = () => {
+        const opening = panel.hasAttribute('hidden');
+        if(opening){ panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
+        ticket.classList.toggle('open', opening);
+        ticket.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      };
+      ticket.addEventListener('click', toggle);
+      ticket.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+      });
+
+      panel.querySelectorAll('.tp-tab').forEach(tabBtn => {
+        tabBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          const key = tabBtn.dataset.tab;
+          panel.querySelectorAll('.tp-tab').forEach(b => b.classList.toggle('active', b === tabBtn));
+          panel.querySelectorAll('.tp-content').forEach(c => {
+            if(c.dataset.tabContent === key){ c.removeAttribute('hidden'); } else { c.setAttribute('hidden', ''); }
+          });
         });
       });
     });
-  });
+  }catch(e){ console.error('Ticket accordion wiring failed:', e); }
 </script>
 
 </body>
