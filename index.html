@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Москва — Пекин — Шанхай — Чунцин — Гонконг</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+  :root{
+    --ink:#040508;
+    --ink-2:#0a0e18;
+    --porcelain:#d7f4ff;
+    --porcelain-dim:#5c7c8c;
+    --jade:#12e8d4;
+    --jade-dim:#0b6b62;
+    --seal:#ff2a6d;
+    --seal-bright:#ff5c8a;
+    --gold:#ffae2b;
+    --line:rgba(18,232,212,0.18);
+    --violet:#7a2eff;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255,174,43,0.10), transparent 60%),
+      radial-gradient(ellipse 800px 600px at 100% 10%, rgba(122,46,255,0.10), transparent 55%),
+      radial-gradient(ellipse 700px 500px at 50% 100%, rgba(18,232,212,0.08), transparent 60%),
+      var(--ink);
+    color:var(--porcelain);
+    font-family:'Share Tech Mono', monospace;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .display{font-family:'Orbitron', sans-serif;}
+
+  /* ambient texture */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.045;
+    background-image:radial-gradient(circle at 1px 1px, #12e8d4 1px, transparent 0);
+    background-size:3px 3px;
+  }
+
+  /* scanlines + drifting fog */
+  .scanlines{
+    position:fixed; inset:0; pointer-events:none; z-index:2; mix-blend-mode:overlay;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(18,232,212,0.05) 0px,
+      rgba(18,232,212,0.05) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+    opacity:.5;
+  }
+  .scanlines::after{
+    content:'';
+    position:absolute; left:0; right:0; height:120px;
+    background:linear-gradient(to bottom, transparent, rgba(18,232,212,0.09), transparent);
+    animation:sweep 9s linear infinite;
+  }
+  @keyframes sweep{
+    0%{ top:-120px; }
+    100%{ top:100%; }
+  }
+
+  @keyframes flicker{
+    0%,100%{opacity:1;}
+    92%{opacity:1;}
+    93%{opacity:.4;}
+    94%{opacity:1;}
+    96%{opacity:.6;}
+    97%{opacity:1;}
+  }
+
+  .wrap{max-width:980px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
+
+  /* ---------- HEADER ---------- */
+  header{padding:64px 0 40px; border-bottom:1px solid var(--line); position:relative;}
+  header::after{
+    content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px;
+    background:linear-gradient(90deg, var(--jade), transparent 40%, var(--seal) 75%, transparent);
+    box-shadow:0 0 8px 1px var(--jade);
+  }
+  .eyebrow{
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--jade); margin-bottom:18px; display:flex; align-items:center; gap:10px;
+    text-shadow:0 0 8px rgba(18,232,212,.65);
+    animation:flicker 7s infinite;
+  }
+  .eyebrow::before{content:''; width:22px; height:1px; background:var(--jade); box-shadow:0 0 6px var(--jade);}
+  h1{
+    font-family:'Orbitron', sans-serif; font-weight:700; font-size:clamp(34px,6vw,58px);
+    line-height:1.05; margin:0 0 20px; letter-spacing:.01em; text-transform:uppercase;
+    color:var(--porcelain);
+    text-shadow:0 0 6px rgba(215,244,255,.5), 0 0 22px rgba(18,232,212,.4), 0 0 46px rgba(255,42,109,.25);
+  }
+  h1 .arrow{color:var(--seal-bright); font-weight:400; padding:0 6px; font-size:.7em; text-shadow:0 0 10px var(--seal);}
+  .sub{color:var(--porcelain-dim); font-size:14px; max-width:560px;}
+  .datebar{
+    margin-top:28px; display:flex; gap:0; flex-wrap:wrap; border:1px solid var(--line);
+    box-shadow:0 0 0 1px rgba(18,232,212,.06), 0 0 24px rgba(18,232,212,.06);
+  }
+  .datebar div{padding:14px 20px; border-right:1px solid var(--line); flex:1; min-width:140px;}
+  .datebar div:last-child{border-right:none;}
+  .datebar .k{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--porcelain-dim); margin-bottom:6px;}
+  .datebar .v{font-family:'Orbitron', sans-serif; font-size:20px; color:var(--gold); text-shadow:0 0 10px rgba(255,174,43,.6);}
+
+  /* ---------- MAP ---------- */
+  section.map{padding:56px 0; border-bottom:1px solid var(--line);}
+  .section-title{
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--porcelain-dim);
+    margin-bottom:24px; display:flex; align-items:center; gap:10px;
+  }
+  .section-title span.num{color:var(--seal-bright); font-family:'Orbitron', sans-serif; font-size:16px; text-shadow:0 0 10px rgba(255,92,138,.7);}
+  svg#routemap{width:100%; height:auto; overflow:visible;}
+  .map-node-label{font-family:'Share Tech Mono', monospace; font-size:13px; fill:var(--porcelain);}
+  .map-node-sub{font-family:'Share Tech Mono', monospace; font-size:9.5px; fill:var(--porcelain-dim);}
+  .map-caption{font-size:11px; color:var(--porcelain-dim); margin-top:14px; max-width:520px;}
+  .map-caption em{color:var(--porcelain); font-style:normal; border-bottom:1px dotted var(--porcelain-dim);}
+
+  /* ---------- TICKET STACK ---------- */
+  section.stack{padding:56px 0;}
+  .ticket{
+    position:relative;
+    display:grid;
+    grid-template-columns: 108px 1fr 148px;
+    border:1px solid var(--line);
+    margin-bottom:22px;
+    background:linear-gradient(180deg, var(--ink-2), var(--ink));
+    box-shadow:0 0 0 1px rgba(18,232,212,.05), 0 0 30px rgba(18,232,212,.05), inset 0 1px 0 rgba(18,232,212,.06);
+    transition:box-shadow .3s ease;
+  }
+  .ticket:hover{box-shadow:0 0 0 1px rgba(18,232,212,.15), 0 0 40px rgba(18,232,212,.14), inset 0 1px 0 rgba(18,232,212,.1);}
+  .ticket::before{
+    content:'';
+    position:absolute; left:108px; top:0; bottom:0; width:0;
+    border-left:1px dashed var(--line);
+  }
+  .ticket::after{
+    content:'';
+    position:absolute; right:148px; top:0; bottom:0; width:0;
+    border-left:1px dashed var(--line);
+  }
+  .t-day{
+    padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between;
+    border-right:none;
+  }
+  .t-day .count{font-family:'Orbitron', sans-serif; font-size:34px; color:var(--gold); line-height:1; text-shadow:0 0 12px rgba(255,174,43,.55);}
+  .t-day .count sup{font-size:13px; color:var(--porcelain-dim); font-family:'Share Tech Mono';}
+  .t-day .range{font-size:9.5px; color:var(--porcelain-dim); letter-spacing:.06em;}
+
+  .t-body{padding:22px 26px;}
+  .t-city{font-family:'Orbitron', sans-serif; font-weight:700; font-size:24px; color:var(--porcelain); margin-bottom:4px; text-transform:uppercase; letter-spacing:.02em; text-shadow:0 0 14px rgba(18,232,212,.4);}
+  .t-role{font-size:10.5px; text-transform:uppercase; letter-spacing:.12em; color:var(--jade); margin-bottom:14px;}
+  .t-notes{font-size:12px; color:var(--porcelain-dim); max-width:420px;}
+  .t-notes b{color:var(--porcelain); font-weight:500;}
+  .t-flags{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .flag{
+    font-size:9.5px; padding:3px 8px; border:1px solid var(--line); color:var(--porcelain-dim);
+    letter-spacing:.04em;
+  }
+  .flag.warn{border-color:rgba(255,42,109,.55); color:var(--seal-bright);}
+  .flag.ok{border-color:rgba(18,232,212,.5); color:var(--jade);}
+
+  .t-stamp{
+    padding:22px 20px; display:flex; flex-direction:column; align-items:flex-end; justify-content:space-between; text-align:right;
+  }
+  .stamp{
+    width:64px; height:64px; border:2px solid var(--seal); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; transform:rotate(-8deg);
+    color:var(--seal-bright); font-family:'Orbitron', sans-serif; font-size:11px; text-align:center; line-height:1.15;
+    opacity:.9;
+    box-shadow:0 0 12px rgba(255,42,109,.5), inset 0 0 10px rgba(255,42,109,.25);
+    text-shadow:0 0 8px rgba(255,42,109,.7);
+  }
+  .t-transit{font-size:9.5px; color:var(--porcelain-dim); line-height:1.6;}
+  .t-transit .hrs{color:var(--gold); font-family:'Orbitron', sans-serif; font-size:15px; text-shadow:0 0 10px rgba(255,174,43,.55);}
+
+  /* transit connector row between tickets */
+  .transit-row{
+    display:flex; align-items:center; gap:14px; padding:8px 0 8px 108px; margin:-10px 0 22px;
+    font-size:10.5px; color:var(--porcelain-dim);
+  }
+  .transit-row .line{flex:1; height:0; border-top:1px dotted var(--porcelain-dim); opacity:.4;}
+  .transit-row .mode{color:var(--jade); letter-spacing:.05em; white-space:nowrap;}
+
+  /* ---------- BUDGET ---------- */
+  section.budget{padding:56px 0; border-top:1px solid var(--line);}
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th{
+    text-align:left; font-weight:500; text-transform:uppercase; letter-spacing:.08em; font-size:10px;
+    color:var(--porcelain-dim); padding:10px 12px; border-bottom:1px solid var(--line);
+  }
+  td{padding:14px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  td.num{color:var(--gold); font-family:'Orbitron', sans-serif; font-size:15px; white-space:nowrap; text-shadow:0 0 10px rgba(255,174,43,.5);}
+  td.route{color:var(--porcelain);}
+  td.note{color:var(--porcelain-dim); font-size:11.5px;}
+
+  .total-row td{border-top:1px solid var(--porcelain-dim); font-weight:600;}
+  .total-row td.num{font-size:19px;}
+
+  /* ---------- OPEN ITEMS ---------- */
+  section.open{padding:0 0 72px;}
+  .open-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .open-item{background:var(--ink); padding:22px;}
+  .open-item .n{font-family:'Orbitron', sans-serif; color:var(--seal-bright); font-size:13px; margin-bottom:8px; text-shadow:0 0 8px rgba(255,92,138,.55);}
+  .open-item .d{font-size:12px; color:var(--porcelain-dim);}
+
+  /* ---------- DAY PLAN ---------- */
+  section.dayplan{padding:56px 0; border-top:1px solid var(--line);}
+  .dp-city{margin-bottom:34px;}
+  .dp-city-name{
+    font-family:'Orbitron', sans-serif; font-size:19px; color:var(--gold); margin-bottom:10px;
+    padding-bottom:8px; border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.03em;
+    text-shadow:0 0 12px rgba(255,174,43,.5);
+  }
+  .dp-day{display:grid; grid-template-columns:70px 1fr; gap:16px; padding:10px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
+  .dp-day:last-child{border-bottom:none;}
+  .dp-date{color:var(--jade); font-family:'Share Tech Mono'; white-space:nowrap; padding-top:1px;}
+  .dp-text{color:var(--porcelain-dim); line-height:1.6;}
+  .dp-text b{color:var(--porcelain); font-weight:500;}
+  .dp-text .flag{margin-right:6px;}
+
+  /* ---------- POI / BOOKING ---------- */
+  section.poi{padding:56px 0; border-top:1px solid var(--line);}
+  .poi-city{margin-bottom:32px;}
+  .poi-city-name{
+    font-family:'Orbitron', sans-serif; font-size:19px; color:var(--gold); margin-bottom:10px;
+    padding-bottom:8px; border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.03em;
+    text-shadow:0 0 12px rgba(255,174,43,.5);
+  }
+
+  /* ---------- FOOD ---------- */
+  section.food{padding:56px 0; border-top:1px solid var(--line);}
+  .food-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .food-card{background:var(--ink); padding:22px;}
+  .food-city{font-family:'Orbitron', sans-serif; font-size:16px; color:var(--seal-bright); margin-bottom:12px; text-shadow:0 0 10px rgba(255,92,138,.55);}
+  .food-card ul{margin:0; padding-left:18px; font-size:12px; color:var(--porcelain-dim); line-height:1.6;}
+  .food-card li{margin-bottom:8px;}
+  .food-card li:last-child{margin-bottom:0;}
+
+  /* ---------- PREP ---------- */
+  section.prep{padding:56px 0; border-top:1px solid var(--line);}
+
+  /* ---------- CHECKLIST ---------- */
+  .checklist-progress{display:flex; align-items:center; gap:16px; margin-bottom:28px;}
+  .cp-bar{flex:1; height:3px; background:var(--line); position:relative; overflow:hidden;}
+  .cp-fill{position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--jade); transition:width .4s ease; box-shadow:0 0 10px var(--jade);}
+  .cp-label{font-size:11px; color:var(--porcelain-dim); white-space:nowrap;}
+  .cp-label span{color:var(--gold); font-family:'Orbitron', sans-serif; font-size:14px; text-shadow:0 0 10px rgba(255,174,43,.55);}
+
+  .checklist-group{margin-bottom:30px;}
+  .cl-group-title{
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--porcelain-dim);
+    margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--line);
+  }
+  .cl-item{
+    display:grid; grid-template-columns:22px 1fr; gap:14px; align-items:flex-start;
+    padding:14px 4px; border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .cl-item:last-child{border-bottom:none;}
+  .cl-item input{position:absolute; opacity:0; width:22px; height:22px; margin:0; cursor:pointer;}
+  .cl-item .box{
+    width:18px; height:18px; margin-top:2px; border:1px solid var(--porcelain-dim);
+    position:relative; flex-shrink:0; transition:all .2s ease;
+  }
+  .cl-item input:checked ~ .box{background:var(--jade); border-color:var(--jade); box-shadow:0 0 10px var(--jade);}
+  .cl-item input:checked ~ .box::after{
+    content:''; position:absolute; left:5px; top:1px; width:5px; height:9px;
+    border:solid var(--ink); border-width:0 2px 2px 0; transform:rotate(45deg);
+  }
+  .cl-item .txt{font-size:13px; color:var(--porcelain); line-height:1.5;}
+  .cl-item .txt .d{font-size:11.5px; color:var(--porcelain-dim); font-weight:400;}
+  .cl-item.done .txt{color:var(--porcelain-dim);}
+  .cl-item.done .txt b{text-decoration:line-through; text-decoration-color:var(--jade-dim); color:var(--porcelain-dim);}
+  .cl-item input:checked ~ .txt b{text-decoration:line-through; text-decoration-color:var(--jade-dim);}
+
+  footer{border-top:1px solid var(--line); padding:28px 0 60px; font-size:11px; color:var(--porcelain-dim); text-align:center; text-transform:uppercase; letter-spacing:.08em;}
+
+  ::selection{background:var(--seal); color:var(--ink);}
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--ink);}
+  ::-webkit-scrollbar-thumb{background:var(--jade-dim); border:2px solid var(--ink);}
+  ::-webkit-scrollbar-thumb:hover{background:var(--jade);}
+
+  @media (max-width:680px){
+    .ticket{grid-template-columns:80px 1fr; }
+    .t-stamp{grid-column:1/3; flex-direction:row; align-items:center; justify-content:space-between; border-top:1px solid var(--line);}
+    .ticket::after{display:none;}
+    .transit-row{padding-left:80px;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Предварительный маршрут · черновик</div>
+    <h1>Пекин<span class="arrow">→</span>Шанхай<span class="arrow">→</span>Чунцин<span class="arrow">→</span>Гонконг</h1>
+    <p class="sub">17 дней, отсчёт от вылета из Москвы до возврата. Якорь маршрута — концерт The Weeknd в Гонконге, 24 октября. Всё остальное выстроено вокруг этой даты.</p>
+    <div class="datebar">
+      <div><div class="k">Вылет</div><div class="v">9 окт</div></div>
+      <div><div class="k">Возврат</div><div class="v">25 окт, 19:00</div></div>
+      <div><div class="k">Всего дней</div><div class="v">17</div></div>
+      <div><div class="k">Городов</div><div class="v">4 + Москва</div></div>
+    </div>
+  </header>
+
+  <section class="map">
+    <div class="section-title"><span class="num">01</span> Схема маршрута <span style="opacity:.5">— не географическая карта, порядок и направление важнее масштаба</span></div>
+    <svg id="routemap" viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="neonGlow" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="4.5" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <!-- dotted route path -->
+      <path d="M 60 60 L 620 55 L 480 175 L 360 280 L 700 305" fill="none" stroke="#12e8d4" stroke-width="1.4" stroke-dasharray="2 7" stroke-linecap="round" filter="url(#neonGlow)"/>
+      <!-- return leg -->
+      <path d="M 700 305 L 60 60" fill="none" stroke="#7a2eff" stroke-width="1" stroke-dasharray="1 5" opacity=".5"/>
+
+      <!-- Moscow -->
+      <circle cx="60" cy="60" r="5" fill="#d7f4ff" filter="url(#neonGlow)"/>
+      <text x="76" y="58" class="map-node-label">Москва</text>
+      <text x="76" y="72" class="map-node-sub">старт / финиш · 9 окт / 25 окт</text>
+
+      <!-- Beijing -->
+      <circle cx="620" cy="55" r="7" fill="#ffae2b" filter="url(#neonGlow)"/>
+      <text x="638" y="52" class="map-node-label">Пекин</text>
+      <text x="638" y="67" class="map-node-sub">10—14 окт · 5 дней</text>
+
+      <!-- Shanghai -->
+      <circle cx="480" cy="175" r="7" fill="#ffae2b" filter="url(#neonGlow)"/>
+      <text x="498" y="172" class="map-node-label">Шанхай</text>
+      <text x="498" y="187" class="map-node-sub">15—18 окт · 4 дня</text>
+
+      <!-- Chongqing -->
+      <circle cx="360" cy="280" r="7" fill="#ff2a6d" filter="url(#neonGlow)"/>
+      <text x="304" y="272" class="map-node-label" text-anchor="end">Чунцин</text>
+      <text x="304" y="287" class="map-node-sub" text-anchor="end">19—22 окт · ночной вид</text>
+
+      <!-- Hong Kong -->
+      <circle cx="700" cy="305" r="7" fill="#12e8d4" filter="url(#neonGlow)"/>
+      <text x="718" y="302" class="map-node-label">Гонконг</text>
+      <text x="718" y="317" class="map-node-sub">22—25 окт · концерт 24-го</text>
+
+      <!-- plane icons on legs -->
+      <g fill="#5c7c8c" font-size="9" font-family="Share Tech Mono">
+        <text x="330" y="45">✈ ~8ч</text>
+        <text x="565" y="128">🚄 4.5ч</text>
+        <text x="435" y="235">✈ 2.5ч</text>
+        <text x="545" y="300">✈ 2.5ч</text>
+      </g>
+    </svg>
+    <p class="map-caption">Единственный участок с полноценным международным контролем на выходе — <em>Чунцин → Гонконг</em>: переход из материкового Китая в САР технически приравнен к пересечению границы.</p>
+  </section>
+
+  <section class="stack">
+    <div class="section-title"><span class="num">02</span> Раскладка по городам</div>
+
+    <!-- BEIJING -->
+    <div class="ticket">
+      <div class="t-day">
+        <div><div class="count">5<sup>дн</sup></div><div class="range">10—14 окт</div></div>
+        <div class="range">заезд вечер 9→10</div>
+      </div>
+      <div class="t-body">
+        <div class="t-city">Пекин</div>
+        <div class="t-role">Императорский центр + один день вне программы</div>
+        <div class="t-notes">5 дней: Запретный город, Стена, Храм Неба, хутуны, 798 Art Zone — и отдельный полный день под <b>Universal Studios Beijing</b> (Тонджоу, 45-70 мин в одну сторону от центра). CBD сознательно исключён — дублировал бы ночной скайлайн Шанхая и Гонконга, которые уже есть в маршруте.</div>
+        <div class="t-flags"><span class="flag ok">CBD убран</span><span class="flag warn">Universal = полный день, как Стена</span></div>
+      </div>
+      <div class="t-stamp">
+        <div class="stamp">MOW<br>→<br>PEK</div>
+        <div class="t-transit">перелёт<br><span class="hrs">~8ч</span> + пересадка часового пояса</div>
+      </div>
+    </div>
+
+    <div class="transit-row"><span class="mode">🚄 Пекин → Шанхай, поезд G, 4.5ч</span><div class="line"></div><span>Пекин Южный → Шанхай Хунцяо, буфер ~30мин</span></div>
+
+    <!-- SHANGHAI -->
+    <div class="ticket">
+      <div class="t-day">
+        <div><div class="count">4<sup>дн</sup></div><div class="range">15—18 окт</div></div>
+        <div class="range">заезд днём 15-го</div>
+      </div>
+      <div class="t-body">
+        <div class="t-city">Шанхай</div>
+        <div class="t-role">Контраст эпох</div>
+        <div class="t-notes">Вайтань и Пудун в одном развороте — колониальная застройка 1920-х против леса небоскрёбов. Дневной поезд из Пекина освобождает вторую половину дня 15-го — больше времени, чем давал бы перелёт с трансфером.</div>
+        <div class="t-flags"><span class="flag">4 полных дня по календарю</span><span class="flag ok">~4 дня реально</span></div>
+      </div>
+      <div class="t-stamp">
+        <div class="stamp">PEK<br>→<br>SHA</div>
+        <div class="t-transit">поезд G (дневной)<br><span class="hrs">~4.5—5ч</span> суммарно</div>
+      </div>
+    </div>
+
+    <div class="transit-row"><span class="mode">✈ Шанхай → Чунцин, 2.5—3ч</span><div class="line"></div><span>внутренний Китай, буфер ~1.5—2ч</span></div>
+
+    <!-- CHONGQING -->
+    <div class="ticket">
+      <div class="t-day">
+        <div><div class="count">2<sup>дн</sup></div><div class="range">20—21 окт</div></div>
+        <div class="range">+ вечер 19-го</div>
+      </div>
+      <div class="t-body">
+        <div class="t-city">Чунцин</div>
+        <div class="t-role">Ночной город · выбран сознательно</div>
+        <div class="t-notes">Приоритет — <b>ночной визуал</b> (Хунъядун, эстакады, туман), но дневные часы 20-21 теперь тоже заполнены (Цзефанбэй, Чаотяньмэнь, Шаньчэнсян, театр Готай) — все точки центральные, без больших переездов. Утро дня отъезда (22-е) съедено транзитом с погранконтролем — при цели «ночной вид» это несущественная потеря.</div>
+        <div class="t-flags"><span class="flag warn">утро 22-го потеряно</span><span class="flag ok">не критично при этой цели</span></div>
+      </div>
+      <div class="t-stamp">
+        <div class="stamp">SHA<br>→<br>CKG</div>
+        <div class="t-transit">регистрация + перелёт<br><span class="hrs">~4.5—5ч</span> суммарно</div>
+      </div>
+    </div>
+
+    <div class="transit-row"><span class="mode">✈ Чунцин → Гонконг, 2.5ч</span><div class="line"></div><span>переход в САР — иммиграционный контроль как на международном рейсе</span></div>
+
+    <!-- HONG KONG -->
+    <div class="ticket">
+      <div class="t-day">
+        <div><div class="count">4<sup>дн</sup></div><div class="range">22—25 окт</div></div>
+        <div class="range">бронь жилья 22—25</div>
+      </div>
+      <div class="t-body">
+        <div class="t-city">Гонконг</div>
+        <div class="t-role">Якорь всей поездки</div>
+        <div class="t-notes">Концерт The Weeknd, Kai Tak Stadium, вечер 24 октября. Вылет домой — 25-го в 19:00, буфер после концерта ~15—19 часов.</div>
+        <div class="t-flags"><span class="flag ok">буфер после концерта в норме</span></div>
+      </div>
+      <div class="t-stamp">
+        <div class="stamp">HKG<br>→<br>MOW</div>
+        <div class="t-transit">вылет 25 окт<br><span class="hrs">19:00</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dayplan">
+    <div class="section-title"><span class="num">03</span> Программа по дням</div>
+
+    <div class="dp-city">
+      <div class="dp-city-name">Пекин</div>
+      <div class="dp-day"><span class="dp-date">10 окт</span><span class="dp-text">Тяньаньмэнь (проверить требования на вход заранее) → Запретный город → Цзиньшань (сразу за северным выходом) → Ванфуцзин</span></div>
+      <div class="dp-day"><span class="dp-date">11 окт</span><span class="dp-text">Храм Неба → Цяньмэнь стрит → вечер: Хоухай</span></div>
+      <div class="dp-day"><span class="dp-date">12 окт</span><span class="dp-text">Великая стена, Мутяньюй — полный день</span></div>
+      <div class="dp-day"><span class="dp-date">13 окт</span><span class="dp-text"><b>Universal Studios Beijing</b> — полный день</span></div>
+      <div class="dp-day"><span class="dp-date">14 окт</span><span class="dp-text">Хутуны + Барабанная/Колокольная башни → Храм Ламы → 798 Art Zone</span></div>
+    </div>
+
+    <div class="dp-city">
+      <div class="dp-city-name">Шанхай</div>
+      <div class="dp-day"><span class="dp-date">15 окт</span><span class="dp-text">поезд из Пекина, прибытие днём → заселение → Народная площадь → короткий крюк на запад: <b>Starbucks Reserve Roastery</b> (Западная Наньцзин Лу) → Народный парк (опционально) → обратно через площадь и вниз по восточной <b>Наньцзин Лу</b> (пешеходная, будний день — толпы меньше) → вечер: Вайтань, Русское консульство, мост Вайбайду, бык</span></div>
+      <div class="dp-day"><span class="dp-date">16 окт</span><span class="dp-text">Синьтяньди → Плаза-парк → Французская концессия → вечер: Тяньцзыфан (бары, ужин)</span></div>
+      <div class="dp-day"><span class="dp-date">17 окт</span><span class="dp-text"><span class="flag warn">сб — плотный день</span> Юйюань → <b>паром через Хуанпу на закате</b> → Пудун, <b>бесплатная смотровая Park Hyatt (87 этаж)</b> → <b>вечер: клуб — INS или TAXX, решить на месте</b></span></div>
+      <div class="dp-day"><span class="dp-date">18 окт</span><span class="dp-text">лёгкий день, свободное время — восстановление перед переездом (после клубной ночи и насыщенного 17-го это не формальность, а необходимость)</span></div>
+      <div class="dp-day"><span class="dp-date">19 окт</span><span class="dp-text">сборы, перелёт в Чунцин</span></div>
+    </div>
+
+    <div class="dp-city">
+      <div class="dp-city-name">Чунцин</div>
+      <div class="dp-day"><span class="dp-date">19 окт</span><span class="dp-text">заезд вечером — Хунъядун ночью</span></div>
+      <div class="dp-day"><span class="dp-date">20 окт</span><span class="dp-text">днём: <b>Цзефанбэй</b> (центральная площадь) → <b>Raffles City + набережная Чаотяньмэнь</b> (слияние Янцзы и Цзялинцзян) → вечер: станция Лицзыба + смотровая Хуанцзюэвань</span></div>
+      <div class="dp-day"><span class="dp-date">21 окт</span><span class="dp-text">днём: <b>Шаньчэнсян</b> (старый переулок, французская церковь Rén'ài, кофейни в бомбоубежищах, вид на реку — меньше толп, чем на Хунъядуне) → <b>театр Готай</b> (Grand Theatre) → вечер: повторный заход на Хунъядун / речной круиз (если нужен — отдельная бронь)</span></div>
+      <div class="dp-day"><span class="dp-date">22 окт</span><span class="dp-text">утро — переезд в Гонконг, съедает весь день</span></div>
+    </div>
+
+    <div class="dp-city">
+      <div class="dp-city-name">Гонконг</div>
+      <div class="dp-day"><span class="dp-date">22 окт</span><span class="dp-text">заезд ~13:00 → вечер: набережная Цим Ша Цуй / Avenue of Stars</span></div>
+      <div class="dp-day"><span class="dp-date">23 окт</span><span class="dp-text">Пик Виктория днём → рынки Коулуна вечером</span></div>
+      <div class="dp-day"><span class="dp-date">24 окт</span><span class="dp-text"><b>чил-день</b>, намеренно разгружен → вечер: концерт The Weeknd</span></div>
+      <div class="dp-day"><span class="dp-date">25 окт</span><span class="dp-text">свободное утро → вылет 19:00</span></div>
+    </div>
+  </section>
+
+  <section class="budget">
+    <div class="section-title"><span class="num">04</span> Внутренние перелёты — деньги и время</div>
+    <table>
+      <thead>
+        <tr><th>Участок</th><th>Способ</th><th>Время в пути</th><th>Реальные потери (с буфером)</th><th>Цена, эконом</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="route">Пекин → Шанхай</td><td class="note">поезд G (дневной)</td><td class="note">4ч18м—4.5ч</td><td class="note">~4.5—5ч</td><td class="num">¥300—650 (~$40—90)</td></tr>
+        <tr><td class="route">Шанхай → Чунцин</td><td class="note">самолёт</td><td class="note">2.5—3ч</td><td class="note">~4.5—5ч</td><td class="num">$100—200</td></tr>
+        <tr><td class="route">Чунцин → Гонконг</td><td class="note">самолёт</td><td class="note">2.5ч</td><td class="note">~4.5—5ч (погранконтроль)</td><td class="num">$80—250</td></tr>
+        <tr class="total-row"><td class="route">Итого, 2 внутр. перелёта + 1 поезд</td><td></td><td></td><td class="note">~13.5—15ч транзита суммарно</td><td class="num">$220—540</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="poi">
+    <div class="section-title"><span class="num">05</span> Точки интереса и что бронировать заранее</div>
+
+    <div class="poi-city">
+      <div class="poi-city-name">Пекин</div>
+      <div class="poi-list">
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Запретный город</b><br><span class="d">Билет с датой и временным слотом — раскупается, брать за 1-2 недели. Официальный сайт или касса продают ограниченное число на день.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Великая стена (Мутяньюй)</b><br><span class="d">Входной билет + канатная дорога отдельно. Трансфер/тур можно взять на месте, но в пик сезона лучше забронировать заранее.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Universal Studios Beijing</b><br><span class="d">Билет привязывается к конкретной дате входа (timed entry) — покупать заранее через официальное приложение/сайт, не на месте.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Храм Неба</b><br><span class="d">Комбинированный билет, обычно доступен и в день визита, но лучше проверить онлайн-продажу заранее.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Хутуны / Барабанная и Колокольная башни</b><br><span class="d">Билет на башни — на месте, очередей обычно немного.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>798 Art Zone</b><br><span class="d">Вход в сам квартал бесплатный, часть галерей — тоже. Бронь не нужна.</span></span></label>
+      </div>
+    </div>
+
+    <div class="poi-city">
+      <div class="poi-city-name">Шанхай</div>
+      <div class="poi-list">
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Shanghai Tower / Jin Mao</b><br><span class="d">Если хочешь подняться наверх (не только вид с набережной) — билет лучше взять заранее, особенно на закатное время.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Юйюань (сад)</b><br><span class="d">Билет на месте, очереди возможны в выходные.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Круиз по Хуанпу (опционально)</b><br><span class="d">Вечерний круиз с видом на Вайтань/Пудун — бронировать заранее на конкретный сеанс, если интересно.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Паром через Хуанпу</b><br><span class="d">Бронь не нужна — ¥2 через Alipay или монетами без сдачи. Лучшее время — закат.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая Park Hyatt (87 этаж)</b><br><span class="d">Бронь не нужна, вход свободный — платишь только за чай/еду в лобби-баре (от ¥70). Дресс-код не строгий, но не спортивный костюм.</span></span></label>
+      </div>
+    </div>
+
+    <div class="poi-city">
+      <div class="poi-city-name">Чунцин</div>
+      <div class="poi-list">
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Хунъядун</b><br><span class="d">Вход свободный, бронь не нужна — приходить ближе к закату, чтобы застать переход в ночную подсветку.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Станция Лицзыба</b><br><span class="d">Обычная станция метро — бронь не нужна, только жетон/карта на проезд.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Смотровая на развязку Хуанцзюэвань</b><br><span class="d">Бесплатная площадка, бронь не нужна.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Цзефанбэй</b><br><span class="d">Открытая площадь, бронь не нужна.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Raffles City / Чаотяньмэнь</b><br><span class="d">Смотровая площадка на крыше комплекса — вход обычно свободный, но лучше уточнить на месте, иногда закрыта для непостояльцев отеля.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Шаньчэнсян</b><br><span class="d">Вход свободный, бронь не нужна. Лучше в мягкой обуви — много лестниц, скользко после дождя.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Театр Готай (Grand Theatre)</b><br><span class="d">Снаружи — бесплатно в любое время. Если хочешь попасть на спектакль внутри — отдельная бронь билетов под конкретную дату.</span></span></label>
+      </div>
+    </div>
+
+    <div class="poi-city">
+      <div class="poi-city-name">Гонконг</div>
+      <div class="poi-list">
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Пик Виктория (если едешь)</b><br><span class="d">Трамвай Peak Tram — очереди большие, билет с таймслотом лучше взять заранее онлайн.</span></span></label>
+        <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Концерт The Weeknd</b><br><span class="d">Уже куплен — отдельно уточнить статус physical pickup, если схема через HK Ticketing hotline это требует.</span></span></label>
+      </div>
+    </div>
+  </section>
+
+  <section class="food">
+    <div class="section-title"><span class="num">06</span> Что попробовать по городам</div>
+    <div class="food-grid">
+      <div class="food-card">
+        <div class="food-city">Пекин</div>
+        <ul>
+          <li>Утка по-пекински (Peking duck) — на Цяньмэнь или в проверенном ресторане, не у первой попавшейся вывески</li>
+          <li>Чжацзянмянь — лапша с соевой пастой</li>
+          <li>Цзянбин — уличный завтрак-блинчик с яйцом и хрустящей начинкой</li>
+          <li>Танхулу — засахаренные ягоды боярышника на палочке</li>
+        </ul>
+      </div>
+      <div class="food-card">
+        <div class="food-city">Шанхай</div>
+        <ul>
+          <li>Сяолунбао — суп-дамплинги, есть аккуратно, бульон внутри горячий</li>
+          <li>Шэнцзянбао — жареные снизу пирожки с бульоном</li>
+          <li>Волосатый краб (大闸蟹) — октябрь-ноябрь как раз сезон, совпадает с датами поездки</li>
+          <li>Лапша с луковым маслом (cong you ban mian)</li>
+        </ul>
+      </div>
+      <div class="food-card">
+        <div class="food-city">Чунцин</div>
+        <ul>
+          <li>Хого (火锅) — Чунцин официально считается родиной этого блюда, острый бульон на говяжьем жире</li>
+          <li>Сяомянь — острая лапша, местный завтрак/обед</li>
+          <li>Чуань-чуань — уличная вариация хого на шпажках</li>
+        </ul>
+      </div>
+      <div class="food-card">
+        <div class="food-city">Гонконг</div>
+        <ul>
+          <li>Дим-сам — на завтрак/обед, не вечером (традиционно дневная еда)</li>
+          <li>Яичные вафли (gai daan jai) — уличный стрит-фуд</li>
+          <li>Char siu / жареный гусь — навынос или в лавках с подвешенными тушками в окне</li>
+          <li>Юаньян (yuenyeung) — смесь чая с кофе, местный напиток</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="prep">
+    <div class="section-title"><span class="num">07</span> Подготовка из России — что взять и настроить</div>
+    <div class="checklist-group">
+      <div class="cl-group-title">Документы и деньги</div>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Загранпаспорт</b><br><span class="d">Носить при себе постоянно — без него не пускают на вокзалы, в отели, на аэропорты и достопримечательности.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Электронные + распечатанные билеты, страховка</b></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Копии документов</b><br><span class="d">Бумажные + фото на телефоне + отправить себе на почту.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Наличные юани</b><br><span class="d">Купить заранее в России. Лимит ввоза — эквивалент $5000 (или 20 000 юаней) без декларирования.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Российская карта Union Pay (если есть)</b><br><span class="d">Работают Россельхозбанк и Азиатско-Тихоокеанский банк. К Alipay такую карту привязать нельзя — оформлять карту специально под поездку не имеет смысла.</span></span></label>
+    </div>
+    <div class="checklist-group">
+      <div class="cl-group-title">Приложения и связь</div>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>VPN — купить и установить ЗАРАНЕЕ</b><br><span class="d">LetsVPN / Surfshark / Astrill. В самом Китае сайты VPN-провайдеров тоже могут быть недоступны.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Alipay — установить и верифицировать</b><br><span class="d">Регистрация по росс. номеру → Я → Персональные данные → загрузить паспорт и фото → дождаться статуса «проверено». Пополнение счёта — перевод через Сбер/ВТБ/Тинькофф на A-wallet по номеру +86, первое пополнение — небольшой суммой 200-300 юаней (иначе может не пройти проверку безопасности).</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>WeChat</b><br><span class="d">Установить, для связи и части платежей.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Amap (карты)</b><br><span class="d">Google Maps в Китае работает плохо и не знает многих мест. В настройках Amap есть английский язык.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>eSIM или роуминг</b><br><span class="d">Например, через сервис Yesim — оформить заранее. Альтернатива — сим-карта China Unicom в аэропорту по прилёту (~150 CNY / 15 дней / 40 Гб).</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Arrival card</b><br><span class="d">Можно заполнить заранее в самолёте или по прилёту по ссылке s.nia.gov.cn/ArrivalCardFillingPhone.</span></span></label>
+    </div>
+    <div class="checklist-group">
+      <div class="cl-group-title">Вещи</div>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Пауэрбанк с сертификацией 3C (CCC)</b><br><span class="d">Критично лично для тебя — у тебя 2 внутренних перелёта (Шанхай→Чунцин, Чунцин→Гонконг). На участке Пекин→Шанхай теперь поезд — там это ограничение не действует. Без маркировки CCC на рейсах устройство с высокой вероятностью изымут в аэропорту при пересадке.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Переходник под розетку</b><br><span class="d">Китайский стандарт — плоские вертикальные штыри (Type A), 220V/50Гц. В части отелей и залов ожидания уже есть и европейские розетки/USB/Type-C, но переходник нужен обязательно.</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span class="box"></span><span class="txt"><b>Личная аптечка</b><br><span class="d">От головы, от расстройства желудка, от простуды — привычные тебе препараты.</span></span></label>
+    </div>
+  </section>
+
+  <section class="open">
+    <div class="section-title"><span class="num">08</span> Чек-лист до поездки</div>
+
+    <div class="checklist-progress">
+      <div class="cp-bar"><div class="cp-fill" id="cpFill"></div></div>
+      <div class="cp-label"><span id="cpDone">0</span> / <span id="cpTotal">0</span> закрыто</div>
+    </div>
+
+    <div class="checklist-group">
+      <div class="cl-group-title">Сделано</div>
+      <label class="cl-item done">
+        <input type="checkbox" checked>
+        <span class="box"></span>
+        <span class="txt"><b>Аренда жилья в Гонконге</b><br><span class="d">22—25 октября, бронь подтверждена.</span></span>
+      </label>
+      <label class="cl-item done">
+        <input type="checkbox" checked>
+        <span class="box"></span>
+        <span class="txt"><b>Билет на концерт The Weeknd</b><br><span class="d">Куплен/забронирован. <span class="flag warn" style="margin-left:4px;">проверить отдельно: пройден ли physical pickup через HK Ticketing hotline, если схема требует получения билета на месте</span></span></span>
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <div class="cl-group-title">Не закрыто</div>
+      <label class="cl-item">
+        <input type="checkbox">
+        <span class="box"></span>
+        <span class="txt"><b>Билеты Москва ⇄ Китай</b><br><span class="d">Дата вылета (9 окт) зависит от решения друга об участии в поездке — переменная вне твоего контроля, пока не зафиксирована.</span></span>
+      </label>
+      <label class="cl-item">
+        <input type="checkbox">
+        <span class="box"></span>
+        <span class="txt"><b>Поезд Пекин → Шанхай (дневной G)</b><br><span class="d">Не забронирован. Билеты на 12306/Trip.com открываются за 15 дней до даты — бронировать сразу, как только откроется продажа.</span></span>
+      </label>
+      <label class="cl-item">
+        <input type="checkbox">
+        <span class="box"></span>
+        <span class="txt"><b>Перелёт Шанхай → Чунцин</b><br><span class="d">Не забронирован.</span></span>
+      </label>
+      <label class="cl-item">
+        <input type="checkbox">
+        <span class="box"></span>
+        <span class="txt"><b>Перелёт Чунцин → Гонконг</b><br><span class="d">Не забронирован. Учесть погранконтроль как на международном рейсе — регистрация заранее.</span></span>
+      </label>
+      <label class="cl-item">
+        <input type="checkbox">
+        <span class="box"></span>
+        <span class="txt"><b>Виза / въезд в материковый Китай</b><br><span class="d">Требования для гражданина РФ не проверены в этом разговоре — отдельная задача, не подразумевай автоматически безвизовый режим.</span></span>
+      </label>
+      <label class="cl-item">
+        <input type="checkbox">
+        <span class="box"></span>
+        <span class="txt"><b>Разговор с врачом про плотный пеший туризм</b><br><span class="d">Ты решил не поднимать эту тему повторно — фиксирую как открытый пункт, а не как решённый вопрос, раз явного ответа врача на этот конкретный сценарий не было.</span></span>
+      </label>
+    </div>
+  </section>
+
+  <footer>Черновик маршрута · составлено на основе разговора · цифры перелётов ориентировочные, проверить на датах бронирования</footer>
+
+</div>
+
+<script>
+  // Telegram Mini App bootstrap — no-ops gracefully when opened outside Telegram.
+  const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+  if(tg){
+    tg.ready();
+    tg.expand();
+    try{ tg.setHeaderColor('#040508'); }catch(e){}
+    try{ tg.setBackgroundColor('#040508'); }catch(e){}
+    try{ tg.disableVerticalSwipes && tg.disableVerticalSwipes(); }catch(e){}
+  }
+
+  // Stable per-item key based on DOM order, used both for Telegram CloudStorage
+  // (synced to the user's account, works across every device) and the
+  // localStorage fallback when the page is opened as a plain browser tab.
+  const boxes = Array.from(document.querySelectorAll('.cl-item input[type="checkbox"]'));
+  boxes.forEach((cb, i) => { cb.dataset.key = 'chk_' + i; });
+
+  function syncDoneClass(cb){
+    const item = cb.closest('.cl-item');
+    if(item) item.classList.toggle('done', cb.checked);
+  }
+
+  function updateProgress(){
+    const total = boxes.length;
+    const done = boxes.filter(cb => cb.checked).length;
+    document.getElementById('cpTotal').textContent = total;
+    document.getElementById('cpDone').textContent = done;
+    document.getElementById('cpFill').style.width = (total ? (done/total*100) : 0) + '%';
+  }
+
+  function saveState(cb){
+    const val = cb.checked ? '1' : '0';
+    if(tg && tg.CloudStorage){
+      tg.CloudStorage.setItem(cb.dataset.key, val, () => {});
+    }else{
+      try{ localStorage.setItem(cb.dataset.key, val); }catch(e){}
+    }
+  }
+
+  function applyStates(values){
+    boxes.forEach(cb => {
+      const v = values[cb.dataset.key];
+      if(v === '1') cb.checked = true;
+      else if(v === '0') cb.checked = false;
+      syncDoneClass(cb);
+    });
+    updateProgress();
+  }
+
+  function loadState(){
+    const keys = boxes.map(cb => cb.dataset.key);
+    if(tg && tg.CloudStorage){
+      tg.CloudStorage.getItems(keys, (err, values) => applyStates(err || !values ? {} : values));
+    }else{
+      const values = {};
+      keys.forEach(k => { try{ values[k] = localStorage.getItem(k); }catch(e){} });
+      applyStates(values);
+    }
+  }
+
+  boxes.forEach(cb => {
+    cb.addEventListener('change', () => {
+      syncDoneClass(cb);
+      updateProgress();
+      saveState(cb);
+    });
+  });
+
+  loadState();
+</script>
+
+</body>
+</html>
