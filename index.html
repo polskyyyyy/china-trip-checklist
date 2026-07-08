@@ -199,13 +199,11 @@
     position:relative;
     display:grid;
     grid-template-columns: 108px 1fr 148px;
-    border:1px solid var(--line);
     margin-bottom:22px;
-    background:linear-gradient(180deg, var(--ink-2), var(--ink));
-    box-shadow:0 0 0 1px rgba(225,58,46,.05), 0 0 30px rgba(225,58,46,.05), inset 0 1px 0 rgba(225,58,46,.06);
-    transition:box-shadow .3s ease;
+    background:var(--ink-2);
+    transition:background .2s ease;
   }
-  .ticket:hover{box-shadow:0 0 0 1px rgba(225,58,46,.15), 0 0 40px rgba(225,58,46,.12), inset 0 1px 0 rgba(225,58,46,.1);}
+  .ticket:hover{background:#181818;}
   .ticket::before{
     content:'';
     position:absolute; left:108px; top:0; bottom:0; width:0;
@@ -250,33 +248,26 @@
     padding:22px 20px; display:flex; flex-direction:column; align-items:flex-end; justify-content:space-between; text-align:right;
   }
   .stamp{
-    position:relative;
-    padding:10px 14px;
-    border:1px solid var(--jade);
-    color:var(--jade); font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.05em;
+    color:var(--jade); font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.06em;
     white-space:nowrap;
     text-shadow:0 0 8px rgba(46,196,201,.5);
-    background:rgba(46,196,201,.05);
   }
-  .stamp::before, .stamp::after{
-    content:''; position:absolute; width:7px; height:7px; border:1px solid var(--jade);
-  }
-  .stamp::before{top:-1px; left:-1px; border-right:none; border-bottom:none;}
-  .stamp::after{bottom:-1px; right:-1px; border-left:none; border-top:none;}
   .t-transit{font-size:9.5px; color:var(--porcelain-dim); line-height:1.6;}
   .t-transit .hrs{color:var(--gold); font-family:'Oswald', sans-serif; font-size:15px; text-shadow:0 0 10px rgba(225,58,46,.5);}
 
   /* transit connector row between tickets */
   .transit-row{
-    display:flex; align-items:center; gap:14px; padding:8px 0 8px 108px; margin:-10px 0 22px;
+    display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; padding:8px 0 8px 108px; margin:-10px 0 22px;
     font-size:10.5px; color:var(--porcelain-dim);
   }
-  .transit-row .line{flex:1; height:0; border-top:1px dotted var(--porcelain-dim); opacity:.4;}
+  .transit-row .line{flex:1 1 30px; min-width:24px; height:0; border-top:1px dotted var(--porcelain-dim); opacity:.4;}
   .transit-row .mode{color:var(--jade); letter-spacing:.05em; white-space:nowrap;}
+  .transit-row > span:last-child{flex-basis:100%; line-height:1.5;}
 
   .stack-total{
     display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px 16px;
-    margin-top:8px; padding:16px 20px; border:1px solid var(--line); font-size:12px; color:var(--porcelain-dim);
+    margin-top:8px; padding:16px 20px; font-size:12px; color:var(--porcelain-dim);
+    background:var(--ink-2);
   }
   .stack-total .amount{font-family:'Oswald', sans-serif; font-size:18px; color:var(--gold); text-shadow:0 0 10px rgba(225,58,46,.5);}
 
@@ -289,8 +280,8 @@
   .chev{display:inline-block; font-size:11px; transition:transform .2s ease;}
   .ticket.open .chev{transform:rotate(180deg);}
   .ticket-panel{
-    border:1px solid var(--line); border-top:none; background:var(--ink-2);
-    padding:20px 22px 26px; margin:-4px 0 22px; animation:panelIn .18s ease;
+    background:#161616;
+    padding:20px 22px 26px; margin:-2px 0 22px; animation:panelIn .18s ease;
   }
   @keyframes panelIn{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
   .tp-poster{margin:-4px 0 20px; border:1px solid var(--line); position:relative;}
@@ -310,8 +301,8 @@
     background-size:cover; background-position:center 20%;
     opacity:.5;
   }
-  .tp-poster-ghost.red{filter:grayscale(1) sepia(1) saturate(7) hue-rotate(-28deg) brightness(.95); transform:translateX(-4px);}
-  .tp-poster-ghost.teal{filter:grayscale(1) sepia(1) saturate(7) hue-rotate(140deg) brightness(1.05); transform:translateX(4px);}
+  .tp-poster-ghost.red{filter:grayscale(1) sepia(1) saturate(7) hue-rotate(-28deg) brightness(1); opacity:.7; transform:translateX(-4px);}
+  .tp-poster-ghost.teal{filter:grayscale(1) sepia(1) saturate(7) hue-rotate(140deg) brightness(1.05); opacity:.22; transform:translateX(3px);}
   .tp-poster-img::after{
     content:''; position:absolute; inset:0; pointer-events:none;
     background-image:radial-gradient(circle, rgba(10,10,10,.5) 1px, transparent 1.3px);
