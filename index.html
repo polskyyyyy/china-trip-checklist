@@ -197,15 +197,29 @@
     z-index:-1; pointer-events:none; white-space:nowrap;
   }
   .section-title span.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:16px; letter-spacing:.04em; text-shadow:0 0 10px rgba(225,58,46,.5);}
-  .china-map{position:relative; width:100%; border:1px solid var(--line); overflow:hidden;}
-  .china-map img{display:block; width:100%; height:auto; filter:contrast(1.08) brightness(.92);}
-  .china-map::after{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(10,10,10,.55) 100%);
+  /* full-bleed: break out of .wrap's padding to span the whole viewport width */
+  .china-map{
+    position:relative; width:100vw; margin:0 calc(50% - 50vw) 28px; overflow:hidden;
   }
-  svg#routemap{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
-  .map-node-label{font-family:'IBM Plex Mono', monospace; font-size:19px; fill:var(--porcelain);}
-  .map-node-sub{font-family:'IBM Plex Mono', monospace; font-size:14px; fill:var(--porcelain-dim);}
+  .china-map img{
+    display:block; width:100%; height:auto; filter:contrast(1.1) brightness(.95);
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%);
+    mask-image:linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%);
+  }
+  svg#routemap{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none;}
+  .map-pin{
+    position:absolute; transform:translate(14px,-50%);
+    display:flex; flex-direction:column; gap:1px; white-space:nowrap; pointer-events:none;
+  }
+  .map-pin.right{transform:translate(calc(-100% - 14px),-50%); align-items:flex-end; text-align:right;}
+  .map-pin-label{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:.02em; color:var(--porcelain);
+    text-shadow:0 0 6px rgba(0,0,0,.9), 0 0 10px rgba(225,58,46,.5);
+  }
+  .map-pin-sub{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--porcelain-dim);
+    text-shadow:0 0 6px rgba(0,0,0,.9);
+  }
   .map-caption{font-size:11px; color:var(--porcelain-dim); margin-top:14px; max-width:520px;}
   .map-caption em{color:var(--porcelain); font-style:normal; border-bottom:1px dotted var(--porcelain-dim);}
 
@@ -477,11 +491,11 @@
   <section class="map">
     <div class="section-title" data-num="01"><span class="num">01</span> Схема маршрута <span style="opacity:.5">— стилизованная карта рельефа, сгенерирована нейросетью</span></div>
     <div class="china-map">
-      <img src="china-map.jpg" alt="Стилизованная карта рельефа Китая" loading="lazy">
-      <svg id="routemap" viewBox="0 0 1315 1197" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <img src="china-map.jpg" alt="Стилизованная карта рельефа восточного Китая" loading="lazy">
+      <svg id="routemap" viewBox="0 0 620 720" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="neonGlow" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feGaussianBlur stdDeviation="2.6" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -489,35 +503,32 @@
           </filter>
         </defs>
 
-        <!-- Moscow leg — off-map to the northwest, only the tag + connecting line is shown -->
-        <path d="M 40 36 L 960 542" fill="none" stroke="#7a1f18" stroke-width="2" stroke-dasharray="2 10" opacity=".7"/>
-        <circle cx="40" cy="36" r="7" fill="#7a1f18"/>
-        <text x="56" y="30" class="map-node-label">MOW</text>
-        <text x="56" y="50" class="map-node-sub">Москва · за кадром карты</text>
+        <!-- Moscow — short off-frame stub above Beijing, flight arrives from the northwest -->
+        <path d="M 320 40 L 400 142" fill="none" stroke="#7a1f18" stroke-width="1.4" stroke-dasharray="2 7" opacity=".8"/>
+        <circle cx="320" cy="40" r="4" fill="#7a1f18"/>
 
         <!-- dotted route path -->
-        <path d="M 960 542 L 1030 740 L 695 780 L 880 995" fill="none" stroke="#e13a2e" stroke-width="3" stroke-dasharray="3 13" stroke-linecap="round" filter="url(#neonGlow)"/>
+        <path d="M 400 142 L 470 340 L 135 380 L 320 595" fill="none" stroke="#e13a2e" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round" filter="url(#neonGlow)"/>
 
-        <!-- Beijing -->
-        <circle cx="960" cy="542" r="12" fill="#e13a2e" filter="url(#neonGlow)"/>
-        <text x="982" y="534" class="map-node-label">Пекин</text>
-        <text x="982" y="560" class="map-node-sub">10—14 окт · 5 дней</text>
-
-        <!-- Shanghai -->
-        <circle cx="1030" cy="740" r="12" fill="#e13a2e" filter="url(#neonGlow)"/>
-        <text x="1052" y="732" class="map-node-label">Шанхай</text>
-        <text x="1052" y="758" class="map-node-sub">15—18 окт · 4 дня</text>
-
-        <!-- Chongqing -->
-        <circle cx="695" cy="780" r="12" fill="#e13a2e" filter="url(#neonGlow)"/>
-        <text x="671" y="772" class="map-node-label" text-anchor="end">Чунцин</text>
-        <text x="671" y="798" class="map-node-sub" text-anchor="end">19—22 окт · ночной вид</text>
-
-        <!-- Hong Kong -->
-        <circle cx="880" cy="995" r="12" fill="#e13a2e" filter="url(#neonGlow)"/>
-        <text x="856" y="1030" class="map-node-label" text-anchor="end">Гонконг</text>
-        <text x="856" y="1056" class="map-node-sub" text-anchor="end">22—25 окт · концерт 24-го</text>
+        <circle cx="400" cy="142" r="6" fill="#e13a2e" filter="url(#neonGlow)"/>
+        <circle cx="470" cy="340" r="6" fill="#e13a2e" filter="url(#neonGlow)"/>
+        <circle cx="135" cy="380" r="6" fill="#e13a2e" filter="url(#neonGlow)"/>
+        <circle cx="320" cy="595" r="6" fill="#e13a2e" filter="url(#neonGlow)"/>
       </svg>
+
+      <div class="map-pin" style="left:51.6%; top:5.5%;"><span class="map-pin-label">✈ MOW</span></div>
+      <div class="map-pin" style="left:64.5%; top:19.7%;">
+        <span class="map-pin-label">Пекин</span><span class="map-pin-sub">10—14 окт · 5 дней</span>
+      </div>
+      <div class="map-pin" style="left:75.8%; top:47.2%;">
+        <span class="map-pin-label">Шанхай</span><span class="map-pin-sub">15—18 окт · 4 дня</span>
+      </div>
+      <div class="map-pin right" style="left:21.8%; top:52.8%;">
+        <span class="map-pin-label">Чунцин</span><span class="map-pin-sub">19—22 окт · ночной вид</span>
+      </div>
+      <div class="map-pin right" style="left:51.6%; top:82.6%;">
+        <span class="map-pin-label">Гонконг</span><span class="map-pin-sub">22—25 окт · концерт 24-го</span>
+      </div>
     </div>
     <p class="map-caption">Единственный участок с полноценным международным контролем на выходе — <em>Чунцин → Гонконг</em>: переход из материкового Китая в САР технически приравнен к пересечению границы.</p>
     <div class="term-tag" style="margin-top:8px;">BORDER_CHECK · 边境管制</div>
