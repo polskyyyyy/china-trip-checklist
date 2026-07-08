@@ -9,13 +9,12 @@
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Oswald:wght@400;500;600;700&display=swap');
 
   :root{
-    --bg-void:#0a0908;
-    --bg-panel:#16130f;
-    --amber-core:#e8942c;
-    --amber-dim:#8a5a1f;
+    --bg-void:#0a0a0a;
+    --bg-panel:#141414;
+    --red-core:#e13a2e;
+    --red-dim:#7a1f18;
     --teal-signal:#2ec4c9;
     --teal-deep:#123f42;
-    --magenta-rare:#d4368f;
     --fog-grey:#4a4640;
     --text-primary:#e8e2d5;
     --text-dim:#8a8478;
@@ -27,10 +26,10 @@
     --porcelain-dim:var(--text-dim);
     --jade:var(--teal-signal);
     --jade-dim:var(--teal-deep);
-    --seal:var(--magenta-rare);
-    --seal-bright:var(--magenta-rare);
-    --gold:var(--amber-core);
-    --gold-dim:var(--amber-dim);
+    --seal:var(--red-core);
+    --seal-bright:var(--red-core);
+    --gold:var(--red-core);
+    --gold-dim:var(--red-dim);
     --line:rgba(74,70,64,0.45);
   }
 
@@ -40,9 +39,9 @@
     margin:0;
     overflow-x:hidden;
     background:
-      radial-gradient(ellipse 1000px 560px at 12% -8%, rgba(232,148,44,0.12), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 18%, rgba(232,148,44,0.07), transparent 55%),
-      radial-gradient(ellipse 900px 620px at 40% 105%, rgba(232,148,44,0.06), transparent 60%),
+      radial-gradient(ellipse 1000px 560px at 12% -8%, rgba(225,58,46,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 18%, rgba(225,58,46,0.045), transparent 55%),
+      radial-gradient(ellipse 900px 620px at 40% 105%, rgba(225,58,46,0.035), transparent 60%),
       var(--ink);
     color:var(--porcelain);
     font-family:'IBM Plex Mono', monospace;
@@ -66,7 +65,7 @@
   .lightsweep::before{
     content:'';
     position:absolute; left:-15%; width:130%; height:220px; top:-260px;
-    background:linear-gradient(180deg, transparent, rgba(232,148,44,0.05) 45%, rgba(232,148,44,0.08) 50%, rgba(232,148,44,0.05) 55%, transparent);
+    background:linear-gradient(180deg, transparent, rgba(225,58,46,0.05) 45%, rgba(225,58,46,0.08) 50%, rgba(225,58,46,0.05) 55%, transparent);
     transform:rotate(-2.5deg);
     animation:lightpass 34s ease-in-out infinite;
   }
@@ -94,7 +93,7 @@
   header::after{
     content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px;
     background:linear-gradient(90deg, var(--gold), transparent 45%, var(--seal) 80%, transparent);
-    box-shadow:0 0 8px 1px rgba(232,148,44,.4);
+    box-shadow:0 0 8px 1px rgba(225,58,46,.4);
   }
   .eyebrow{
     font-size:12px; letter-spacing:.2em; text-transform:uppercase;
@@ -108,26 +107,26 @@
     line-height:1.15; margin:0 0 20px; letter-spacing:-0.01em;
     color:var(--porcelain);
     overflow-wrap:break-word; word-break:break-word;
-    text-shadow:0 0 6px rgba(232,226,213,.4), 0 0 22px rgba(232,148,44,.35), 0 0 46px rgba(212,54,143,.2);
+    text-shadow:0 0 6px rgba(232,226,213,.4), 0 0 22px rgba(225,58,46,.35), 0 0 46px rgba(225,58,46,.2);
   }
   h1 .arrow{color:var(--seal); font-weight:400; padding:0 6px; font-size:.7em; text-shadow:0 0 10px var(--seal);}
   .sub{color:var(--porcelain-dim); font-size:14px; max-width:560px;}
   .datebar{
     margin-top:28px; display:flex; gap:0; flex-wrap:wrap; border:1px solid var(--line);
-    box-shadow:0 0 0 1px rgba(232,148,44,.05), 0 0 24px rgba(232,148,44,.05);
+    box-shadow:0 0 0 1px rgba(225,58,46,.05), 0 0 24px rgba(225,58,46,.05);
   }
   .datebar div{padding:14px 20px; border-right:1px solid var(--line); flex:1; min-width:140px;}
   .datebar div:last-child{border-right:none;}
   .datebar .k{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--porcelain-dim); margin-bottom:6px;}
-  .datebar .v{font-family:'Oswald', sans-serif; font-size:20px; color:var(--gold); text-shadow:0 0 10px rgba(232,148,44,.55);}
+  .datebar .v{font-family:'Oswald', sans-serif; font-size:20px; color:var(--gold); text-shadow:0 0 10px rgba(225,58,46,.55);}
 
   /* ---------- MAP ---------- */
   section.map{padding:56px 0; border-bottom:1px solid var(--line);}
   .section-title{
     font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--porcelain-dim);
-    margin-bottom:24px; display:flex; align-items:center; gap:10px;
+    margin-bottom:24px; display:flex; align-items:center; gap:8px 10px; flex-wrap:wrap;
   }
-  .section-title span.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:16px; letter-spacing:.04em; text-shadow:0 0 10px rgba(232,148,44,.5);}
+  .section-title span.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:16px; letter-spacing:.04em; text-shadow:0 0 10px rgba(225,58,46,.5);}
   svg#routemap{width:100%; height:auto; overflow:visible;}
   .map-node-label{font-family:'IBM Plex Mono', monospace; font-size:13px; fill:var(--porcelain);}
   .map-node-sub{font-family:'IBM Plex Mono', monospace; font-size:9.5px; fill:var(--porcelain-dim);}
@@ -143,10 +142,10 @@
     border:1px solid var(--line);
     margin-bottom:22px;
     background:linear-gradient(180deg, var(--ink-2), var(--ink));
-    box-shadow:0 0 0 1px rgba(232,148,44,.05), 0 0 30px rgba(232,148,44,.05), inset 0 1px 0 rgba(232,148,44,.06);
+    box-shadow:0 0 0 1px rgba(225,58,46,.05), 0 0 30px rgba(225,58,46,.05), inset 0 1px 0 rgba(225,58,46,.06);
     transition:box-shadow .3s ease;
   }
-  .ticket:hover{box-shadow:0 0 0 1px rgba(232,148,44,.15), 0 0 40px rgba(232,148,44,.12), inset 0 1px 0 rgba(232,148,44,.1);}
+  .ticket:hover{box-shadow:0 0 0 1px rgba(225,58,46,.15), 0 0 40px rgba(225,58,46,.12), inset 0 1px 0 rgba(225,58,46,.1);}
   .ticket::before{
     content:'';
     position:absolute; left:108px; top:0; bottom:0; width:0;
@@ -161,12 +160,12 @@
     padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between;
     border-right:none;
   }
-  .t-day .count{font-family:'Oswald', sans-serif; font-size:34px; color:var(--gold); line-height:1; text-shadow:0 0 12px rgba(232,148,44,.5);}
+  .t-day .count{font-family:'Oswald', sans-serif; font-size:34px; color:var(--gold); line-height:1; text-shadow:0 0 12px rgba(225,58,46,.5);}
   .t-day .count sup{font-size:13px; color:var(--porcelain-dim); font-family:'IBM Plex Mono';}
   .t-day .range{font-size:9.5px; color:var(--porcelain-dim); letter-spacing:.06em;}
 
   .t-body{padding:22px 26px;}
-  .t-city{font-family:'Oswald', sans-serif; font-weight:700; font-size:24px; color:var(--porcelain); margin-bottom:4px; text-transform:uppercase; letter-spacing:.03em; text-shadow:0 0 14px rgba(232,148,44,.3);}
+  .t-city{font-family:'Oswald', sans-serif; font-weight:700; font-size:24px; color:var(--porcelain); margin-bottom:4px; text-transform:uppercase; letter-spacing:.03em; text-shadow:0 0 14px rgba(225,58,46,.3);}
   .t-role{font-size:10.5px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold-dim); margin-bottom:14px;}
   .t-notes{font-size:12px; color:var(--porcelain-dim); max-width:420px;}
   .t-notes b{color:var(--porcelain); font-weight:500;}
@@ -175,7 +174,7 @@
     font-size:9.5px; padding:3px 8px; border:1px solid var(--line); color:var(--porcelain-dim);
     letter-spacing:.04em; text-transform:uppercase;
   }
-  .flag.warn{border-color:rgba(212,54,143,.55); color:var(--seal);}
+  .flag.warn{border-color:rgba(225,58,46,.55); color:var(--seal);}
   .flag.ok{border-color:rgba(46,196,201,.5); color:var(--jade);}
 
   .t-stamp{
@@ -190,7 +189,7 @@
     text-shadow:0 0 8px rgba(46,196,201,.55);
   }
   .t-transit{font-size:9.5px; color:var(--porcelain-dim); line-height:1.6;}
-  .t-transit .hrs{color:var(--gold); font-family:'Oswald', sans-serif; font-size:15px; text-shadow:0 0 10px rgba(232,148,44,.5);}
+  .t-transit .hrs{color:var(--gold); font-family:'Oswald', sans-serif; font-size:15px; text-shadow:0 0 10px rgba(225,58,46,.5);}
 
   /* transit connector row between tickets */
   .transit-row{
@@ -209,7 +208,7 @@
   }
   td{padding:14px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
   tr:last-child td{border-bottom:none;}
-  td.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:15px; white-space:nowrap; text-shadow:0 0 10px rgba(232,148,44,.45);}
+  td.num{color:var(--gold); font-family:'Oswald', sans-serif; font-size:15px; white-space:nowrap; text-shadow:0 0 10px rgba(225,58,46,.45);}
   td.route{color:var(--porcelain);}
   td.note{color:var(--porcelain-dim); font-size:11.5px;}
 
@@ -220,7 +219,7 @@
   section.open{padding:0 0 72px;}
   .open-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
   .open-item{background:var(--ink); padding:22px;}
-  .open-item .n{font-family:'Oswald', sans-serif; color:var(--gold); font-size:13px; margin-bottom:8px; text-shadow:0 0 8px rgba(232,148,44,.45);}
+  .open-item .n{font-family:'Oswald', sans-serif; color:var(--gold); font-size:13px; margin-bottom:8px; text-shadow:0 0 8px rgba(225,58,46,.45);}
   .open-item .d{font-size:12px; color:var(--porcelain-dim);}
 
   /* ---------- DAY PLAN ---------- */
@@ -229,7 +228,7 @@
   .dp-city-name{
     font-family:'Oswald', sans-serif; font-size:19px; color:var(--gold); margin-bottom:10px;
     padding-bottom:8px; border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.06em;
-    text-shadow:0 0 12px rgba(232,148,44,.45);
+    text-shadow:0 0 12px rgba(225,58,46,.45);
   }
   .dp-day{display:grid; grid-template-columns:70px 1fr; gap:16px; padding:10px 0; border-bottom:1px dotted var(--line); font-size:12.5px;}
   .dp-day:last-child{border-bottom:none;}
@@ -244,14 +243,14 @@
   .poi-city-name{
     font-family:'Oswald', sans-serif; font-size:19px; color:var(--gold); margin-bottom:10px;
     padding-bottom:8px; border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.06em;
-    text-shadow:0 0 12px rgba(232,148,44,.45);
+    text-shadow:0 0 12px rgba(225,58,46,.45);
   }
 
   /* ---------- FOOD ---------- */
   section.food{padding:56px 0; border-top:1px solid var(--line);}
   .food-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
   .food-card{background:var(--ink); padding:22px;}
-  .food-city{font-family:'Oswald', sans-serif; font-size:16px; color:var(--gold); margin-bottom:12px; text-transform:uppercase; letter-spacing:.05em; text-shadow:0 0 10px rgba(232,148,44,.45);}
+  .food-city{font-family:'Oswald', sans-serif; font-size:16px; color:var(--gold); margin-bottom:12px; text-transform:uppercase; letter-spacing:.05em; text-shadow:0 0 10px rgba(225,58,46,.45);}
   .food-card ul{margin:0; padding-left:18px; font-size:12px; color:var(--porcelain-dim); line-height:1.6;}
   .food-card li{margin-bottom:8px;}
   .food-card li:last-child{margin-bottom:0;}
@@ -264,7 +263,7 @@
   .cp-bar{flex:1; height:3px; background:var(--line); position:relative; overflow:hidden;}
   .cp-fill{position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--jade); transition:width .4s ease; box-shadow:0 0 10px var(--jade);}
   .cp-label{font-size:11px; color:var(--porcelain-dim); white-space:nowrap;}
-  .cp-label span{color:var(--gold); font-family:'Oswald', sans-serif; font-size:14px; text-shadow:0 0 10px rgba(232,148,44,.5);}
+  .cp-label span{color:var(--gold); font-family:'Oswald', sans-serif; font-size:14px; text-shadow:0 0 10px rgba(225,58,46,.5);}
 
   .checklist-group{margin-bottom:30px;}
   .cl-group-title{
@@ -294,6 +293,15 @@
 
   footer{border-top:1px solid var(--line); padding:28px 0 60px; font-size:11px; color:var(--porcelain-dim); text-align:center; text-transform:uppercase; letter-spacing:.08em;}
 
+  /* ---------- TERMINAL TAGS (decorative bilingual HUD captions) ---------- */
+  .term-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--jade); opacity:.6; white-space:nowrap;
+  }
+  .term-tag::before{content:'// '; opacity:.7;}
+  .eyebrow-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px;}
+  .footer-term{margin-top:10px; opacity:.55;}
+
   ::selection{background:var(--seal); color:var(--ink);}
   ::-webkit-scrollbar{width:10px;}
   ::-webkit-scrollbar-track{background:var(--ink);}
@@ -314,7 +322,10 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Предварительный маршрут · черновик</div>
+    <div class="eyebrow-row">
+      <div class="eyebrow">Предварительный маршрут · черновик</div>
+      <div class="term-tag">DRAFT_V0.9 · 草稿</div>
+    </div>
     <h1>Пекин<span class="arrow">→</span>Шанхай<span class="arrow">→</span>Чунцин<span class="arrow">→</span>Гонконг</h1>
     <p class="sub">17 дней, отсчёт от вылета из Москвы до возврата. Якорь маршрута — концерт The Weeknd в Гонконге, 24 октября. Всё остальное выстроено вокруг этой даты.</p>
     <div class="datebar">
@@ -338,7 +349,7 @@
         </filter>
       </defs>
       <!-- dotted route path -->
-      <path d="M 60 60 L 620 55 L 480 175 L 360 280 L 700 305" fill="none" stroke="#e8942c" stroke-width="1.4" stroke-dasharray="2 7" stroke-linecap="round" filter="url(#neonGlow)"/>
+      <path d="M 60 60 L 620 55 L 480 175 L 360 280 L 700 305" fill="none" stroke="#e13a2e" stroke-width="1.4" stroke-dasharray="2 7" stroke-linecap="round" filter="url(#neonGlow)"/>
       <!-- return leg -->
       <path d="M 700 305 L 60 60" fill="none" stroke="#4a4640" stroke-width="1" stroke-dasharray="1 5" opacity=".6"/>
 
@@ -348,12 +359,12 @@
       <text x="76" y="72" class="map-node-sub">старт / финиш · 9 окт / 25 окт</text>
 
       <!-- Beijing -->
-      <circle cx="620" cy="55" r="7" fill="#e8942c" filter="url(#neonGlow)"/>
+      <circle cx="620" cy="55" r="7" fill="#e13a2e" filter="url(#neonGlow)"/>
       <text x="638" y="52" class="map-node-label">Пекин</text>
       <text x="638" y="67" class="map-node-sub">10—14 окт · 5 дней</text>
 
       <!-- Shanghai -->
-      <circle cx="480" cy="175" r="7" fill="#e8942c" filter="url(#neonGlow)"/>
+      <circle cx="480" cy="175" r="7" fill="#e13a2e" filter="url(#neonGlow)"/>
       <text x="498" y="172" class="map-node-label">Шанхай</text>
       <text x="498" y="187" class="map-node-sub">15—18 окт · 4 дня</text>
 
@@ -376,10 +387,11 @@
       </g>
     </svg>
     <p class="map-caption">Единственный участок с полноценным международным контролем на выходе — <em>Чунцин → Гонконг</em>: переход из материкового Китая в САР технически приравнен к пересечению границы.</p>
+    <div class="term-tag" style="margin-top:8px;">BORDER_CHECK · 边境管制</div>
   </section>
 
   <section class="stack">
-    <div class="section-title"><span class="num">02</span> Раскладка по городам</div>
+    <div class="section-title"><span class="num">02</span> Раскладка по городам <span class="term-tag" style="margin-left:auto;">TRANSIT.LOG · 过境记录</span></div>
 
     <!-- BEIJING -->
     <div class="ticket">
@@ -499,7 +511,7 @@
   </section>
 
   <section class="budget">
-    <div class="section-title"><span class="num">04</span> Внутренние перелёты — деньги и время</div>
+    <div class="section-title"><span class="num">04</span> Внутренние перелёты — деньги и время <span class="term-tag" style="margin-left:auto;">BUDGET.LOG · 预算数据</span></div>
     <table>
       <thead>
         <tr><th>Участок</th><th>Способ</th><th>Время в пути</th><th>Реальные потери (с буфером)</th><th>Цена, эконом</th></tr>
@@ -630,7 +642,7 @@
   </section>
 
   <section class="open">
-    <div class="section-title"><span class="num">08</span> Чек-лист до поездки</div>
+    <div class="section-title"><span class="num">08</span> Чек-лист до поездки <span class="term-tag" style="margin-left:auto;">SYNC: CLOUD · 云端同步</span></div>
 
     <div class="checklist-progress">
       <div class="cp-bar"><div class="cp-fill" id="cpFill"></div></div>
@@ -686,7 +698,10 @@
     </div>
   </section>
 
-  <footer>Черновик маршрута · составлено на основе разговора · цифры перелётов ориентировочные, проверить на датах бронирования</footer>
+  <footer>
+    Черновик маршрута · составлено на основе разговора · цифры перелётов ориентировочные, проверить на датах бронирования
+    <div class="term-tag footer-term">END OF FILE · 文件结束</div>
+  </footer>
 
 </div>
 
@@ -696,8 +711,8 @@
   if(tg){
     tg.ready();
     tg.expand();
-    try{ tg.setHeaderColor('#0a0908'); }catch(e){}
-    try{ tg.setBackgroundColor('#0a0908'); }catch(e){}
+    try{ tg.setHeaderColor('#0a0a0a'); }catch(e){}
+    try{ tg.setBackgroundColor('#0a0a0a'); }catch(e){}
     try{ tg.disableVerticalSwipes && tg.disableVerticalSwipes(); }catch(e){}
   }
 
