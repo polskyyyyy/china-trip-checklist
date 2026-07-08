@@ -51,11 +51,16 @@
 
   .display{font-family:'Oswald', sans-serif;}
 
-  /* ambient texture — halftone-dot grain, tinted in the app palette */
+  /* ambient texture — two layered halftone-dot grains at different scales, tinted in the app palette */
   .grain{
     position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.06;
     background-image:radial-gradient(circle at 1px 1px, #e13a2e 1px, transparent 0);
     background-size:3px 3px;
+  }
+  .grain2{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.05;
+    background-image:radial-gradient(circle at 1px 1px, #2ec4c9 1.2px, transparent 0);
+    background-size:7px 7px;
   }
 
   /* rare horizontal light beam through fog — replaces scanlines */
@@ -161,23 +166,11 @@
       -2px 0 0 rgba(46,196,201,.55),
       0 0 34px rgba(225,58,46,.2);
   }
-  h1 .arrow{
-    display:inline-block; width:.15em; height:.15em; font-size:1em; margin:0 .1em;
-    background:transparent; text-indent:-999em; overflow:hidden;
-    box-shadow:
-      .3em 0 0 0 var(--jade),
-      .45em .15em 0 0 var(--jade),
-      0 .3em 0 0 var(--seal),
-      .15em .3em 0 0 var(--seal),
-      .3em .3em 0 0 var(--seal),
-      .45em .3em 0 0 var(--seal),
-      .6em .3em 0 0 var(--seal),
-      .45em .45em 0 0 var(--jade),
-      .3em .6em 0 0 var(--jade);
-  }
+  h1 .arrow{color:var(--seal); font-weight:400; font-size:.6em; text-shadow:0 0 10px var(--seal);}
   .sub{color:var(--porcelain-dim); font-size:14px; max-width:560px;}
   .datebar{
-    margin-top:28px; display:flex; gap:0; flex-wrap:wrap; background:var(--ink-2);
+    position:relative;
+    margin-top:28px; display:flex; gap:0; flex-wrap:wrap; background:rgba(20,20,20,.55);
   }
   .datebar div{padding:14px 20px; flex:1; min-width:140px;}
   .datebar .k{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--porcelain-dim); margin-bottom:6px;}
@@ -211,10 +204,11 @@
     display:grid;
     grid-template-columns: 108px 1fr 148px;
     margin-bottom:22px;
-    background:var(--ink-2);
+    background:rgba(20,20,20,.55);
+    cursor:pointer;
     transition:background .2s ease;
   }
-  .ticket:hover{background:#181818;}
+  .ticket:hover{background:rgba(30,30,30,.7);}
   .t-day{
     padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; justify-content:space-between;
     border-right:none;
@@ -266,9 +260,10 @@
   .transit-row > span:last-child{flex-basis:100%; line-height:1.5;}
 
   .stack-total{
+    position:relative;
     display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px 16px;
     margin-top:8px; padding:16px 20px; font-size:12px; color:var(--porcelain-dim);
-    background:var(--ink-2);
+    background:rgba(20,20,20,.55);
   }
   .stack-total .amount{font-family:'Oswald', sans-serif; font-size:18px; color:var(--gold); text-shadow:0 0 10px rgba(225,58,46,.5);}
 
@@ -281,7 +276,7 @@
   .chev{display:inline-block; font-size:11px; transition:transform .2s ease;}
   .ticket.open .chev{transform:rotate(180deg);}
   .ticket-panel{
-    background:#161616;
+    background:rgba(22,22,22,.6);
     padding:20px 22px 26px; margin:-2px 0 22px; animation:panelIn .18s ease;
   }
   @keyframes panelIn{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:translateY(0);} }
@@ -421,6 +416,7 @@
 </head>
 <body>
 <div class="grain"></div>
+<div class="grain2"></div>
 <div class="lightsweep"></div>
 <div class="wrap">
 
@@ -440,6 +436,8 @@
     </h1>
     <p class="sub">17 дней, отсчёт от вылета из Москвы до возврата. Якорь маршрута — концерт The Weeknd в Гонконге, 24 октября. Всё остальное выстроено вокруг этой даты.</p>
     <div class="datebar">
+      <span class="xmark tl"></span>
+      <span class="xmark br red"></span>
       <div><div class="k">Вылет</div><div class="v">9 окт</div></div>
       <div><div class="k">Возврат</div><div class="v">25 окт, 19:00</div></div>
       <div><div class="k">Всего дней</div><div class="v">17</div></div>
@@ -738,6 +736,7 @@
     </div>
 
     <div class="stack-total">
+      <span class="xmark tl red"></span>
       <span>Итого по внутренним перелётам: 2 перелёта + 1 поезд · ~13.5—15ч транзита суммарно</span>
       <span class="amount">$220—540</span>
     </div>
